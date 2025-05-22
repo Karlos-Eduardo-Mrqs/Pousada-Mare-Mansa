@@ -73,6 +73,10 @@ O modelo relacional do sistema da Pousada Maré Mansa foi implementado com o SQL
 
 A implementação garante integridade referencial entre as tabelas através de chaves estrangeiras. O banco encontra-se funcional e pronto para ser utilizado na fase de desenvolvimento do sistema web.
 
+## Modelo ER 
+
+![alt text](./ModeloEr.png)
+
 ## Como fazer um repositório privado com outras pessoas interagindo ? 
 
 Como ter um repositório compartilhado:
