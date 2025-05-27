@@ -1,5 +1,5 @@
 from controllers.banco import Banco
-from controllers.telas import TelasPython
+from controllers.telas import TelasPousada
 from tkinter import *
 
 # Conectar ao banco
@@ -7,10 +7,8 @@ banco = Banco()
 banco.conectar()
 banco.criar_tabelas()
 
-# Iniciar interface gráfica
+# Criar janela principal
 root = Tk()
-tela = TelasPython(root)  # passando a conexão para uso nas telas
-root.mainloop()
+telas = TelasPousada(root)
 
-# Desconectar banco ao encerrar a aplicação
-banco.desconectar()
+root.mainloop()
