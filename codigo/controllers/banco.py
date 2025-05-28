@@ -1,9 +1,8 @@
 import os
-import sqlite3
-from .control_tipo import Control_Tipo
-from .control_agendamento import Control_Agendamento
-from .control_quarto import Control_Quarto
-from .control_cliente import Control_Cliente
+from .control_tipo import *
+from .control_agendamento import *
+from .control_quarto import *
+from .control_cliente import *
 
 class Banco: 
     def __init__(self, nome_banco='pousada.db'):
@@ -11,12 +10,8 @@ class Banco:
         self.nome_banco = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', nome_banco)
 
     def conectar(self):
-        try:
-            self.conn = sqlite3.connect(self.nome_banco)
-            print("Conexão estabelecida com sucesso.")
-        except sqlite3.Error as erro:
-            print(f"Ocorreu um erro na conexão: {erro}")
-            raise
+        import sqlite3
+        self.conn = sqlite3.connect(self.nome_banco)
     
     def desconectar(self):
         if self.conn:
