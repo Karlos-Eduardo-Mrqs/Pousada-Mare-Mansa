@@ -19,5 +19,9 @@ banco.desconectar()
 root = Tk()
 telas = TelasPousada(root)
 
+<<<<<<< Updated upstream
+root.mainloop()
+>>>>>>> Stashed changes
+=======
 root.mainloop()
 >>>>>>> Stashed changes

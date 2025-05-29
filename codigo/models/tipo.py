@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 @dataclass
 =======
 >>>>>>> Stashed changes
@@ -11,6 +12,14 @@ class Tipo:
     nome:str
     preco:float
 =======
+    id: int
+    nome: str
+    preco: float
+>>>>>>> Stashed changes
+=======
+
+@dataclass
+class Tipo:
     id: int
     nome: str
     preco: float
