@@ -20,6 +20,10 @@ root = Tk()
 telas = TelasPousada(root)
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+root.mainloop()
+>>>>>>> Stashed changes
+=======
 root.mainloop()
 >>>>>>> Stashed changes
 =======
