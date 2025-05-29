@@ -6,9 +6,18 @@ from tkinter import *
 banco = Banco()
 banco.conectar()
 banco.criar_tabelas()
+<<<<<<< Updated upstream
 
 # Criar janela principal
 root = Tk()
 telas = TelasPousada(root)
 
 root.mainloop()
+=======
+banco.desconectar()
+
+root = Tk()
+telas = TelasPousada(root)
+
+root.mainloop()
+>>>>>>> Stashed changes
