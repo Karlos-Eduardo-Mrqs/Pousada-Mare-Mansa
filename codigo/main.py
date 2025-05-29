@@ -1,31 +1,7 @@
-from controllers.banco import Banco
-from controllers.telas import TelasPousada
-from tkinter import *
+import tkinter as tk
+from views.telas import TelasPousada
 
-# Conectar ao banco
-banco = Banco()
-banco.conectar()
-banco.criar_tabelas()
-<<<<<<< Updated upstream
-
-# Criar janela principal
-root = Tk()
-telas = TelasPousada(root)
-
-root.mainloop()
-=======
-banco.desconectar()
-
-root = Tk()
-telas = TelasPousada(root)
-
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-root.mainloop()
->>>>>>> Stashed changes
-=======
-root.mainloop()
->>>>>>> Stashed changes
-=======
-root.mainloop()
->>>>>>> Stashed changes
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = TelasPousada(root)
+    root.mainloop()

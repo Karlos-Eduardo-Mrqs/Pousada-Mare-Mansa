@@ -1,20 +1,39 @@
-from dataclasses import dataclass
 import sqlite3
 
-@dataclass
 class Control_Tipo:
-    conn: sqlite3.Connection
+    def __init__(self, conn: sqlite3.Connection):
+        self.conn = conn
 
     def criar_tabela(self):
+        """Cria a tabela Tipo no banco (se não existir)"""
         cursor = self.conn.cursor()
-        cursor.execute(
-        """
+        cursor.execute("""
             CREATE TABLE IF NOT EXISTS Tipo (
                 id INTEGER PRIMARY KEY,
-                nome TEXT,
-                preco REAL
-            );
-        """
+                nome TEXT NOT NULL,
+                preco REAL NOT NULL
+            )
+        """)
+        self.conn.commit()
+
+    def adicionar_tipo(self, tipo_id: int, nome: str, preco: float):
+        """Adiciona um novo tipo de quarto"""
+        cursor = self.conn.cursor()
+        cursor.execute(
+            "INSERT INTO Tipo (id, nome, preco) VALUES (?, ?, ?)",
+            (tipo_id, nome, preco)
         )
         self.conn.commit()
-        print("Tabela Tipo criada com sucesso.")
+
+    def remover_tipo(self, tipo_id: int):
+        """Remove um tipo pelo ID"""
+        cursor = self.conn.cursor()
+        cursor.execute("DELETE FROM Tipo WHERE id = ?", (tipo_id,))
+        self.conn.commit()
+
+    def listar_tipos(self):
+        """Lista todos os tipos cadastrados"""
+        cursor = self.conn.cursor()
+        cursor.execute("SELECT * FROM Tipo")
+        rows = cursor.fetchall()
+        return [{"id": row[0], "nome": row[1], "preco": row[2]} for row in rows]

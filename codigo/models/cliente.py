@@ -1,7 +1,7 @@
 from dataclasses import dataclass
-@dataclass
 
+@dataclass
 class Cliente:
-    cpf:str
-    nome:str
-    email:str
+    cpf: str
+    nome: str
+    email: str

@@ -1,7 +1,8 @@
-from dataclasses import dataclass
+from datetime import date
 from quarto import Quarto
 from cliente import Cliente
-from datetime import date
+from dataclasses import dataclass
+
 @dataclass
 
 class Agendamento:
