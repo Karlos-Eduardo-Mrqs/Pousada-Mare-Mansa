@@ -4,7 +4,8 @@ from models.usuario import Usuario
 class Control_Usuario:
     def __init__(self, conn: sqlite3.Connection):
         self.conn = conn
-    
+        self.criar_tabela()
+
     def criar_tabela(self):
         cursor = self.conn.cursor()
         cursor.execute('''
@@ -13,36 +14,32 @@ class Control_Usuario:
                 nome TEXT NOT NULL,
                 email TEXT,
                 senha TEXT NOT NULL
-            )
+            );
         ''')
         self.conn.commit()
 
-    def adicionar_usuario(self, cpf: str, nome: str, email: str):
-        """Adiciona um novo usuario ao banco"""
+    def adicionar_usuario(self, nome: str, email: str, senha: str):
         cursor = self.conn.cursor()
         cursor.execute(
-            "INSERT INTO Usuario (cpf, nome, email) VALUES (?, ?, ?)",
-            (cpf, nome, email)
+            "INSERT INTO Usuario (nome, email, senha) VALUES (?, ?, ?);",(nome, email, senha)
         )
         self.conn.commit()
 
-    def remover_usuario(self, cpf: str):
-        """Remove um usuario pelo CPF"""
+    def remover_usuario(self, id: int):
         cursor = self.conn.cursor()
-        cursor.execute("DELETE FROM Usuario WHERE cpf = ?", (cpf,))
+        cursor.execute("DELETE FROM Usuario WHERE id = ?;", (id,))
         self.conn.commit()
 
-    def autenticar(self, nome:str, senha:str):
+    def autenticar(self, nome: str, senha: str):
         cursor = self.conn.cursor()
-        cursor.execute('SELECT * FROM Usuario WHERE nome = ? AND senha = ?', (nome, senha))
+        cursor.execute('SELECT * FROM Usuario WHERE nome = ? AND senha = ?;', (nome, senha))
         row = cursor.fetchone()
         if row:
             return Usuario(*row)
         return None
 
     def listar_usuarios(self):
-        """Lista todos os usuarios cadastrados"""
         cursor = self.conn.cursor()
         cursor.execute("SELECT * FROM Usuario")
         rows = cursor.fetchall()
-        return [{"cpf": row[0], "nome": row[1], "email": row[2]} for row in rows]
+        return [{"id": row[0], "nome": row[1], "email": row[2]} for row in rows]
