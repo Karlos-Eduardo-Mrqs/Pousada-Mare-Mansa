@@ -5,6 +5,7 @@ from controllers.banco import Banco
 from views.tela_login import TelaLogin
 from views.tela_menu import TelaMenu
 from views.tela_agendamento import TelaAgendamento  # Nome genérico da função da tela CRUD
+from views.tela_logs import TelaLogs
 
 class TelasPousada:
     def __init__(self, root):
@@ -35,10 +36,16 @@ class TelasPousada:
         TelaLogin(self)
 
     def abrir_tela_gerenciamento(self):
+        self.limpar_tela()
         TelaMenu(self)
 
     def abrir_agendamentos(self):
-        TelaAgendamento(self)
+        self.limpar_tela()
+        TelaAgendamento(self.root)
+
+    def abrir_logs(self):
+        self.limpar_tela()
+        TelaLogs(self)
 
     def sair(self):
         self.banco.desconectar()

@@ -3,11 +3,10 @@ from tkinter import ttk, messagebox
 
 class TelaAgendamento:
     def __init__(self, root):
-        self.root = root
+        self.root = root        # pega a janela raiz do controlador
         self.root.title("Agendamentos - Pousada Maré Mansa")
         self.root.geometry("800x500")
-        self.root.configure(bg='#FCEBD5')  # Bege claro
-
+        self.root.configure(bg='#FCEBD5')
         self.dados = []  # Simulação de banco
 
         self.criar_interface()
