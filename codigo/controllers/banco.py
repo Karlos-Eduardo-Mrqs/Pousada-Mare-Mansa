@@ -5,6 +5,7 @@ from .control_tipo import Control_Tipo
 from .control_quarto import Control_Quarto
 from .control_cliente import Control_Cliente
 from .control_agendamento import Control_Agendamento
+from .control_usuario import Control_Usuario
 
 class Banco:
     def __init__(self, nome_banco='pousada.db'):
@@ -27,6 +28,9 @@ class Banco:
 
     def criar_tabelas(self):
         if self.conn:
+            self.control_usuario = Control_Usuario(self.conn)
+            self.control_usuario.criar_tabela()
+
             self.control_tipo = Control_Tipo(self.conn)
             self.control_tipo.criar_tabela()
 

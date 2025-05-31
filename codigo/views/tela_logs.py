@@ -4,7 +4,6 @@ import json
 
 from tkinter import ttk
 
-
 class TelaLogs:
     def __init__(self, app):
         self.root = app.root
@@ -31,3 +30,8 @@ class TelaLogs:
                     self.tree.insert('', tk.END, values=(log["data"], log["usuario"], log["acao"]))
         except FileNotFoundError:
             pass
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = TelaLogs(root)
+    root.mainloop()

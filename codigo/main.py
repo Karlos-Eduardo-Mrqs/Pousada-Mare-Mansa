@@ -2,10 +2,9 @@ import tkinter as tk
 from controllers.banco import Banco
 
 # Importa as funções/modulares de interface
-from views.tela_login import TelaLogin
+# from views.tela_login import
 from views.tela_menu import TelaMenu
 from views.tela_agendamento import TelaAgendamento  # Nome genérico da função da tela CRUD
-from views.tela_logs import TelaLogs
 
 class TelasPousada:
     def __init__(self, root):
@@ -24,7 +23,7 @@ class TelasPousada:
         self.quarto_controller = self.banco.control_quarto
 
         # Tela inicial
-        self.abrir_tela_login()
+        self.abrir_tela_gerenciamento()
 
     def limpar_tela(self):
         """Remove todos os elementos da tela"""
@@ -33,7 +32,8 @@ class TelasPousada:
 
     # Chamadas de telas
     def abrir_tela_login(self):
-        TelaLogin(self)
+        pass
+        # TelaLogin(self)
 
     def abrir_tela_gerenciamento(self):
         self.limpar_tela()
@@ -45,7 +45,7 @@ class TelasPousada:
 
     def abrir_logs(self):
         self.limpar_tela()
-        TelaLogs(self)
+        #TelaLogs(self)
 
     def sair(self):
         self.banco.desconectar()

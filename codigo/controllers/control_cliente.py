@@ -1,9 +1,10 @@
 import sqlite3
+from models.cliente import Cliente
 
 class Control_Cliente:
     def __init__(self, conn: sqlite3.Connection):
         self.conn = conn
-
+    
     def criar_tabela(self):
         """Cria a tabela Cliente no banco (se não existir)"""
         cursor = self.conn.cursor()
