@@ -15,7 +15,7 @@ class TelaLogs:
         tk.Label(self.root, text="Relatório de Atividades", font=("Helvetica", 16, "bold"), bg="#FCEBD5").pack(pady=10)
 
         # Tabela de logs
-        colunas = ("data", "usuario", "acao")
+        colunas = ("data", "usuario", "acao", "tela" ,"tipo")
         self.tree = ttk.Treeview(self.root, columns=colunas, show='headings')
         for col in colunas:
             self.tree.heading(col, text=col.capitalize())
@@ -32,7 +32,7 @@ class TelaLogs:
             with open("logs.json", "r", encoding="utf-8") as f:
                 logs = json.load(f)
                 for log in logs:
-                    self.tree.insert('', tk.END, values=(log["data"], log["usuario"], log["acao"]))
+                    self.tree.insert('', tk.END, values=(log["data"], log["usuario"], log["acao"],log["tela"], log["tipo"]))
         except FileNotFoundError:
             pass
 

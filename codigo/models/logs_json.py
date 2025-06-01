@@ -10,12 +10,14 @@ class LoggerJSON:
             with open(self.caminho, "w", encoding="utf-8") as f:
                 json.dump([], f, indent=4, ensure_ascii=False)
 
-    def registrar(self, usuario, acao):
+    def registrar(self, usuario, acao, tela, tipo="INFO"):
         """Adiciona uma nova entrada de log"""
         novo_log = {
             "data": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "usuario": usuario,
-            "acao": acao
+            "acao": acao,
+            "tela": tela,
+            "tipo": tipo
         }
 
         logs = self._carregar_logs()
@@ -35,3 +37,4 @@ class LoggerJSON:
     def listar_logs(self):
         """Retorna todos os logs (pode ser usado para exibição no sistema)"""
         return self._carregar_logs()
+    
