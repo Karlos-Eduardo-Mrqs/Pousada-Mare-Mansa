@@ -2,21 +2,25 @@ import sqlite3
 from models.usuario import Usuario
 
 class Control_Usuario:
-    def __init__(self, conn: sqlite3.Connection):
+    def __init__(self, conn):
         self.conn = conn
-        self.criar_tabela()
 
     def criar_tabela(self):
-        cursor = self.conn.cursor()
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS Usuario (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                nome TEXT NOT NULL,
-                email TEXT,
-                senha TEXT NOT NULL
-            );
-        ''')
-        self.conn.commit()
+        try:
+            cursor = self.conn.cursor()
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS Usuario (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    nome TEXT NOT NULL,
+                    email TEXT NOT NULL UNIQUE,
+                    senha TEXT NOT NULL
+                );
+            """)
+            self.conn.commit()
+            print("✅ Tabela 'Usuario' verificada/criada com sucesso.")
+        except sqlite3.Error as erro:
+            print(f"❌ Erro ao criar Tabela Usuario: {erro}")
+
 
     def adicionar_usuario(self, nome: str, email: str, senha: str):
         cursor = self.conn.cursor()

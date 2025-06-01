@@ -10,7 +10,7 @@ from .control_usuario import Control_Usuario
 class Banco:
     def __init__(self, nome_banco='pousada.db'):
         self.conn = None
-        self.nome_banco = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', nome_banco)
+        self.nome_banco = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", nome_banco)
 
     def conectar(self):
         try:
@@ -28,6 +28,7 @@ class Banco:
 
     def criar_tabelas(self):
         if self.conn:
+            
             self.control_usuario = Control_Usuario(self.conn)
             self.control_usuario.criar_tabela()
 

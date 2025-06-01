@@ -1,8 +1,8 @@
-import sqlite3
 import tkinter as tk
 from tkinter import ttk, messagebox
 from PIL import Image, ImageTk, ImageOps
 from controllers.control_usuario import Control_Usuario
+from controllers.banco import Banco
 
 class TelaLogin:
     def __init__(self, root, app):
@@ -12,9 +12,9 @@ class TelaLogin:
         self.root.geometry("700x500")
         self.root.configure(bg="#FAF1E4")
 
-        conn = sqlite3.connect("pousada.db")
-        self.controller_usuario = Control_Usuario(conn)
-
+        self.conn = Banco()
+        self.conn.conectar()  # conecta explicitamente, já que o Banco ainda não foi usado
+        self.controller_usuario = Control_Usuario(self.conn.conn)
         self.garantir_admin()
         self.construir_interface()
 
