@@ -5,6 +5,7 @@ from controllers.banco import Banco
 from views.tela_login import TelaLogin
 from views.tela_menu import TelaMenu
 from views.tela_agendamento import TelaAgendamento  # Nome genérico da função da tela CRUD
+from views.tela_logs import TelaLogs
 
 class TelasPousada:
     def __init__(self, root):
@@ -26,26 +27,30 @@ class TelasPousada:
         self.abrir_tela_login()
 
     def limpar_tela(self):
-        """Remove todos os elementos da tela"""
+        if not self.root.winfo_exists():
+            return
         for widget in self.root.winfo_children():
             widget.destroy()
-
+    
     # Chamadas de telas
     def abrir_tela_login(self):
         self.limpar_tela()
         TelaLogin(self.root, self)  # Passa self como app
 
-    def abrir_tela_gerenciamento(self):
+    def abrir_tela_menu(self):
         self.limpar_tela()
-        TelaMenu(self)
+        TelaMenu(self.root,self)
 
     def abrir_agendamentos(self):
         self.limpar_tela()
-        TelaAgendamento(self.root)
+        TelaAgendamento(self.root, self)
 
     def abrir_logs(self):
         self.limpar_tela()
-        #TelaLogs(self)
+        TelaLogs(self)
+
+    def voltar_menu(self):
+        self.root.after(100, self.abrir_tela_menu)
 
     def sair(self):
         self.banco.desconectar()

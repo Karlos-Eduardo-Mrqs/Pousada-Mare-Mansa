@@ -2,8 +2,9 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 
 class TelaAgendamento:
-    def __init__(self, root):
+    def __init__(self, root, app):
         self.root = root        # pega a janela raiz do controlador
+        self.app = app          # controlador para voltar ao menu
         self.root.title("Agendamentos - Pousada Maré Mansa")
         self.root.geometry("800x500")
         self.root.configure(bg='#FCEBD5')
@@ -45,6 +46,7 @@ class TelaAgendamento:
         tk.Button(frame_botoes, text="Criar", command=self.criar_agendamento).pack(side=tk.LEFT, padx=10)
         tk.Button(frame_botoes, text="Editar", command=self.editar_agendamento).pack(side=tk.LEFT, padx=10)
         tk.Button(frame_botoes, text="Deletar", command=self.deletar_agendamento).pack(side=tk.LEFT, padx=10)
+        tk.Button(frame_botoes, text="Voltar ao Menu", bg="#D9B08C", command=self.voltar_menu).pack(side=tk.LEFT, padx=10)
 
     def buscar_agendamento(self):
         termo = self.entrada_pesquisa.get().lower()
@@ -114,8 +116,11 @@ class TelaAgendamento:
 
         tk.Button(janela, text="Salvar", command=salvar).grid(row=4, columnspan=2, pady=10)
 
-# Executa o app
+    def voltar_menu(self):
+        self.app.voltar_menu()
+
+# Exemplo de execução do app (com controlador fictício)
 if __name__ == "__main__":
     root = tk.Tk()
-    app = TelaAgendamento(root)
+    TelaAgendamento(root, None)
     root.mainloop()

@@ -81,7 +81,7 @@ class TelaLogin:
         usuario = self.controller_usuario.autenticar(nome, senha)
         if usuario:
             messagebox.showinfo("Login bem-sucedido", f"Bem-vindo, {usuario.nome}!")
-            self.app.abrir_tela_gerenciamento()  # <- chama a próxima tela
+            self.app.abrir_tela_menu()  # <- chama a próxima tela
         else:
             messagebox.showerror("Erro", "Usuário ou senha inválidos.")
     

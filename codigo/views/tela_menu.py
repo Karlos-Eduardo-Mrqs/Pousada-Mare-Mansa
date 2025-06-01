@@ -1,27 +1,41 @@
 import tkinter as tk
 
 class TelaMenu:
-    def __init__(self, app):
+    def __init__(self, root, app):
+        self.root = root
         self.app = app
-        self.app.limpar_tela()
-        self.app.root.title("Pousada Maré Mansa - Menu Principal")
+        self.root.title("Menu Principal - Pousada Maré Mansa")
+        self.root.geometry("600x400")
+        self.root.configure(bg="#FCEBD5")
 
-        self.frame = tk.Frame(self.app.root, bg="#FCEBD5")
-        self.frame.pack(pady=40, padx=20, fill=tk.BOTH, expand=True)
+        # Cabeçalho
+        topo = tk.Frame(self.root, bg="#3A7765", height=60)
+        topo.pack(fill=tk.X)
+        tk.Label(topo, text="Menu Principal", font=("Helvetica", 20, "bold"), bg="#3A7765", fg="white").pack(pady=15)
 
-        tk.Label(
-            self.frame,
-            text="Sistema de Gestão da Pousada Maré Mansa",
-            font=("Arial", 16, "bold"),
-            bg="#FCEBD5"
-        ).pack(pady=20)
+        # Corpo
+        corpo = tk.Frame(self.root, bg="#FCEBD5")
+        corpo.pack(expand=True)
 
-        botoes = [
-            ("Gerenciar Agendamentos", self.app.abrir_agendamentos),
-            # ("Gerenciar Quartos", self.app.abrir_quartos),
-            ("Visualizar Relatórios (Logs)", self.app.abrir_logs),
-            ("Sair", self.app.sair)
-        ]
+        estilo_botao = {
+            "font": ("Helvetica", 14),
+            "width": 25,
+            "bg": "#3A7765",
+            "fg": "white",
+            "activebackground": "#2E5F50",
+            "activeforeground": "white",
+            "bd": 0,
+            "highlightthickness": 0,
+            "cursor": "hand2",
+            "relief": tk.FLAT,
+            "pady": 10
+        }
 
-        for texto, comando in botoes:
-            tk.Button(self.frame,text=texto,font=("Arial", 12),width=35,height=2,bg="#E3C9A8",command=comando).pack(pady=10)
+        tk.Button(corpo, text="📅 Gerenciar Agendamentos", command=self.app.abrir_agendamentos, **estilo_botao).pack(pady=10)
+        tk.Button(corpo, text="📊 Visualizar Relatório", command=self.app.abrir_logs, **estilo_botao).pack(pady=10)
+        tk.Button(corpo, text="❌ Sair", command=self.app.sair, **estilo_botao).pack(pady=10)
+        
+        # Rodapé
+        rodape = tk.Frame(self.root, bg="#3A7765", height=40)
+        rodape.pack(fill=tk.X, side=tk.BOTTOM)
+        tk.Label(rodape, text="Pousada Maré Mansa © 2025", bg="#3A7765", fg="white", font=("Helvetica", 10)).pack(pady=10)
