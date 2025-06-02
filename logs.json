@@ -5,5 +5,47 @@
         "acao": "login bem sucedido",
         "tela": "Login.py",
         "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-02 14:37:34",
+        "usuario": "Sistema",
+        "acao": "login bem sucedido",
+        "tela": "Login.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-02 14:43:11",
+        "usuario": "Sistema",
+        "acao": "Realizar Login com campos vazios",
+        "tela": "Login.py",
+        "tipo": "ERROR"
+    },
+    {
+        "data": "2025-06-02 14:53:59",
+        "usuario": "Sistema",
+        "acao": "Falha ao realizar login",
+        "tela": "Login.py",
+        "tipo": "ERROR"
+    },
+    {
+        "data": "2025-06-02 14:54:07",
+        "usuario": "Sistema",
+        "acao": "login bem sucedido",
+        "tela": "Login.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-02 14:59:39",
+        "usuario": "Sistema",
+        "acao": "Falha ao realizar login",
+        "tela": "Login.py",
+        "tipo": "ERROR"
+    },
+    {
+        "data": "2025-06-02 14:59:47",
+        "usuario": "Sistema",
+        "acao": "login bem sucedido",
+        "tela": "Login.py",
+        "tipo": "INFO"
     }
 ]

@@ -1,35 +1,26 @@
-from models.tipo import Tipo
+from models.tipo import Tipo, TipoDAO
+from controllers.banco import Banco
 
-class Control_Tipo:
-    def __init__(self, conn):
-        self.conn = conn
+class TipoController:
+    def __init__(self):
+        self.banco = Banco()
+        self.banco.conectar()  
+        self.tipo_dao = TipoDAO(self.banco.conn)
+        self.tipo_dao.criar_tabela()
 
-    def criar_tabela(self):
-        cursor = self.conn.cursor()
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS Tipo (
-                id INTEGER PRIMARY KEY,
-                nome TEXT NOT NULL,
-                preco REAL NOT NULL
-            )
-        """)
-        self.conn.commit()
+    def adicionar_tipo(self, id, nome, preco):
+        tipo = Tipo(id, nome, preco)
+        self.tipo_dao.inserir(tipo)
 
-    def adicionar_tipo(self, tipo_id: int, nome: str, preco: float):
-        cursor = self.conn.cursor()
-        cursor.execute(
-            "INSERT INTO Tipo (id, nome, preco) VALUES (?, ?, ?)",
-            (tipo_id, nome, preco)
-        )
-        self.conn.commit()
+    def atualizar_tipo(self, id, nome, preco):
+        tipo = Tipo(id, nome, preco)
+        self.tipo_dao.atualizar(tipo)
 
-    def remover_tipo(self, tipo_id: int):
-        cursor = self.conn.cursor()
-        cursor.execute("DELETE FROM Tipo WHERE id = ?", (tipo_id,))
-        self.conn.commit()
+    def remover_tipo(self, id):
+        self.tipo_dao.deletar(id)
 
     def listar_tipos(self):
-        cursor = self.conn.cursor()
-        cursor.execute("SELECT * FROM Tipo")
-        rows = cursor.fetchall()
-        return [Tipo(id=row[0], nome=row[1], preco=row[2]) for row in rows]
+        return self.tipo_dao.buscar_todos()
+
+    def fechar_conexao(self):
+        self.banco.desconectar()

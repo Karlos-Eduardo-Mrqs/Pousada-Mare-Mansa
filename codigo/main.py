@@ -1,12 +1,12 @@
 import tkinter as tk
 from tkinter import messagebox
-
-# Importa as funções/modulares de interface
 from controllers.banco import Banco
+
+# Importações diretas dos módulos
 from views.tela_login import TelaLogin
 from views.tela_menu import TelaMenu
-from views.tela_agendamento import TelaAgendamento
 from views.tela_logs import TelaLogs
+from views.tela_agendamento import TelaAgendamento
 
 class TelasPousada:
     def __init__(self, root):
@@ -14,17 +14,18 @@ class TelasPousada:
         self.root.geometry("500x400")
         self.root.title("Pousada Maré Mansa")
 
-        # Banco de dados e controladores
         try:
+            # Inicializa banco e controladores
             self.banco = Banco()
             self.banco.conectar()
             self.banco.criar_tabelas()
 
+            # Controladores disponíveis globalmente nas telas
             self.agendamento_controller = self.banco.control_agendamento
             self.cliente_controller = self.banco.control_cliente
             self.quarto_controller = self.banco.control_quarto
 
-            # Tela inicial só é aberta se não houver erro
+            # Tela inicial
             self.abrir_tela_login()
 
         except Exception as e:
@@ -39,10 +40,9 @@ class TelasPousada:
         for widget in self.root.winfo_children():
             widget.destroy()
 
-    # Chamadas de telas
     def abrir_tela_login(self):
         self.limpar_tela()
-        TelaLogin(self.root, self)
+        TelaLogin(self.root, self, self.cliente_controller)
 
     def abrir_tela_menu(self):
         self.limpar_tela()

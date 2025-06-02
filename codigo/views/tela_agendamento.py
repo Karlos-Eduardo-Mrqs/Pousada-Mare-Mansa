@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
+from .forms_agendamento import Forms_Agendamento
 
 class TelaAgendamento:
     def __init__(self, root, app):
@@ -57,7 +58,7 @@ class TelaAgendamento:
                 self.tabela.insert('', tk.END, values=(dado['id'], dado['nome'], dado['data'], dado['quarto']))
 
     def criar_agendamento(self):
-        self.abrir_janela_agendamento("Criar")
+        Forms_Agendamento(self.root)
 
     def editar_agendamento(self):
         item = self.tabela.selection()

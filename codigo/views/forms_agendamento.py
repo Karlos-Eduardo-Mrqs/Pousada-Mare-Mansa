@@ -1,15 +1,14 @@
 import tkinter as tk
-import sqlite3
 from tkinter import ttk
 from tkcalendar import DateEntry
 from controllers.control_cliente import Control_Cliente
 from controllers.control_tipo import Control_Tipo
-from controllers.control_quarto import Control_Quarto
+# from controllers.control_quarto import Control_Quarto
 from controllers.control_agendamento import Control_Agendamento
 
 class Forms_Agendamento:
-    def __init__(self):
-        self.conn = sqlite3.connect("pousada.db")
+    def __init__(self,conn):
+        self.conn = conn
         self.ctr_quarto = Control_Quarto(self.conn)
         self.ctr_cliente = Control_Cliente(self.conn)
         self.ctr_tipo = Control_Tipo(self.conn)

@@ -1,45 +1,24 @@
-from models.quarto import Quarto 
+from models.quarto import Quarto, QuartoDAO
+import sqlite3
 
-class Control_Quarto:
-    def __init__(self, conn):
-        self.conn = conn
+class QuartoController:
+    def __init__(self, db_path="pousada.db"):
+        self.conn = sqlite3.connect(db_path)
+        self.quarto_dao = QuartoDAO(self.conn)
+        self.quarto_dao.criar_tabela()
 
-    def criar_tabela(self):
-        cursor = self.conn.cursor()
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS Quarto (
-                numero INTEGER PRIMARY KEY,
-                disponibilidade INTEGER NOT NULL DEFAULT 1,
-                capacidade INTEGER NOT NULL,
-                tipo_id INTEGER,
-                FOREIGN KEY(tipo_id) REFERENCES Tipo(id)
-            )
-        """)
-        self.conn.commit()
-
-    def adicionar_quarto(self, numero: int, disponibilidade: bool, capacidade: int, tipo_id: int):
-        cursor = self.conn.cursor()
-        cursor.execute(
-            "INSERT INTO Quarto (numero, disponibilidade, capacidade, tipo_id) VALUES (?, ?, ?, ?)",
-            (numero, int(disponibilidade), capacidade, tipo_id)
-        )
-        self.conn.commit()
-
-    def remover_quarto(self, numero_quarto: int):
-        cursor = self.conn.cursor()
-        cursor.execute("DELETE FROM Quarto WHERE numero = ?", (numero_quarto,))
-        self.conn.commit()
+    def adicionar_quarto(self, numero_quarto, disponibilidade, capacidade, tipo):
+        quarto = Quarto(numero_quarto, disponibilidade, capacidade, tipo)
+        self.quarto_dao.inserir(quarto)
 
     def listar_quartos(self):
-        cursor = self.conn.cursor()
-        cursor.execute("SELECT * FROM Quarto")
-        rows = cursor.fetchall()
-        return [
-            Quarto(numero_quarto=row[0], disponibilidade=bool(row[1]), capacidade=row[2], tipo=row[3])
-            for row in rows
-        ]
+        return self.quarto_dao.buscar_todos()
 
-    def atualizar_status_quarto(self, disponibilidade:bool, numero:int):
-        cursor = self.conn.cursor()
-        cursor.execute("UPDATE Quarto SET disponibilidade = ? WHERE numero = ?", (disponibilidade, numero))
-        self.conn.commit()
+    def atualizar_quarto(self, quarto: Quarto):
+        self.quarto_dao.atualizar(quarto)
+
+    def remover_quarto(self, numero_quarto):
+        self.quarto_dao.deletar(numero_quarto)
+
+    def fechar_conexao(self):
+        self.conn.close()

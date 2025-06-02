@@ -1,46 +1,26 @@
-import sqlite3
-from models.usuario import Usuario
+from models.usuario import Usuario, UsuarioDAO
+from controllers.banco import Banco
 
-class Control_Usuario:
-    def __init__(self, conn):
-        self.conn = conn
+class ControlUsuario:
+    def __init__(self):
+        self.banco = Banco()
+        self.banco.conectar()
+        self.usuario_dao = UsuarioDAO(self.banco.conn)
+        self.usuario_dao.criar_tabela()
 
-    def criar_tabela(self):
-        try:
-            cursor = self.conn.cursor()
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS Usuario (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    nome TEXT NOT NULL,
-                    email TEXT NOT NULL UNIQUE,
-                    senha TEXT NOT NULL
-                );
-            """)
-            self.conn.commit()
-            print("✅ Tabela 'Usuario' verificada/criada com sucesso.")
-        except sqlite3.Error as erro:
-            print(f"❌ Erro ao criar Tabela Usuario: {erro}")
-
-    def adicionar_usuario(self, nome: str, email: str, senha: str):
-        cursor = self.conn.cursor()
-        cursor.execute(
-            "INSERT INTO Usuario (nome, email, senha) VALUES (?, ?, ?);", (nome, email, senha)
-        )
-        self.conn.commit()
+    def criar_usuario(self, nome: str, email: str, senha: str):
+        # Aqui você poderia adicionar validações (exemplo: email válido, senha forte)
+        novo_usuario = Usuario(id=0, nome=nome, email=email, senha=senha)
+        self.usuario_dao.adicionar_usuario(novo_usuario)
 
     def remover_usuario(self, id: int):
-        cursor = self.conn.cursor()
-        cursor.execute("DELETE FROM Usuario WHERE id = ?;", (id,))
-        self.conn.commit()
+        self.usuario_dao.remover_usuario(id)
 
-    def autenticar(self, nome: str, senha: str):
-        cursor = self.conn.cursor()
-        cursor.execute("SELECT * FROM Usuario WHERE nome = ? AND senha = ?;", (nome, senha))
-        row = cursor.fetchone()
-        return Usuario(*row) if row else None
+    def autenticar_usuario(self, nome: str, senha: str):
+        return self.usuario_dao.autenticar(nome, senha)
 
     def listar_usuarios(self):
-        cursor = self.conn.cursor()
-        cursor.execute("SELECT * FROM Usuario")
-        rows = cursor.fetchall()
-        return [Usuario(id=row[0], nome=row[1], email=row[2], senha=row[3]) for row in rows]
+        return self.usuario_dao.listar_usuarios()
+
+    def fechar_conexao(self):
+        self.banco.desconectar()
