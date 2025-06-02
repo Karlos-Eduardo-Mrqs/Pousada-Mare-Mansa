@@ -2,7 +2,7 @@ import sqlite3
 from datetime import date
 
 class Control_Agendamento:
-    def __init__(self, conn: sqlite3.Connection):
+    def __init__(self, conn):
         self.conn = conn
 
     def criar_tabela(self):

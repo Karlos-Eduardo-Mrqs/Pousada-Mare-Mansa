@@ -1,11 +1,10 @@
-import sqlite3
+from models.tipo import Tipo
 
 class Control_Tipo:
-    def __init__(self, conn: sqlite3.Connection):
+    def __init__(self, conn):
         self.conn = conn
 
     def criar_tabela(self):
-        """Cria a tabela Tipo no banco (se não existir)"""
         cursor = self.conn.cursor()
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS Tipo (
@@ -17,7 +16,6 @@ class Control_Tipo:
         self.conn.commit()
 
     def adicionar_tipo(self, tipo_id: int, nome: str, preco: float):
-        """Adiciona um novo tipo de quarto"""
         cursor = self.conn.cursor()
         cursor.execute(
             "INSERT INTO Tipo (id, nome, preco) VALUES (?, ?, ?)",
@@ -26,14 +24,12 @@ class Control_Tipo:
         self.conn.commit()
 
     def remover_tipo(self, tipo_id: int):
-        """Remove um tipo pelo ID"""
         cursor = self.conn.cursor()
         cursor.execute("DELETE FROM Tipo WHERE id = ?", (tipo_id,))
         self.conn.commit()
 
     def listar_tipos(self):
-        """Lista todos os tipos cadastrados"""
         cursor = self.conn.cursor()
         cursor.execute("SELECT * FROM Tipo")
         rows = cursor.fetchall()
-        return [{"id": row[0], "nome": row[1], "preco": row[2]} for row in rows]
+        return [Tipo(id=row[0], nome=row[1], preco=row[2]) for row in rows]

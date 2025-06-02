@@ -1,11 +1,11 @@
 import os
 import sqlite3
 
-from .control_tipo import Control_Tipo
-from .control_quarto import Control_Quarto
 from .control_cliente import Control_Cliente
+from .control_quarto import Control_Quarto
 from .control_agendamento import Control_Agendamento
 from .control_usuario import Control_Usuario
+from .control_tipo import Control_Tipo
 
 class Banco:
     def __init__(self, nome_banco='pousada.db'):

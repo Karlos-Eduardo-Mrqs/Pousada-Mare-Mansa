@@ -21,11 +21,10 @@ class Control_Usuario:
         except sqlite3.Error as erro:
             print(f"❌ Erro ao criar Tabela Usuario: {erro}")
 
-
     def adicionar_usuario(self, nome: str, email: str, senha: str):
         cursor = self.conn.cursor()
         cursor.execute(
-            "INSERT INTO Usuario (nome, email, senha) VALUES (?, ?, ?);",(nome, email, senha)
+            "INSERT INTO Usuario (nome, email, senha) VALUES (?, ?, ?);", (nome, email, senha)
         )
         self.conn.commit()
 
@@ -36,14 +35,12 @@ class Control_Usuario:
 
     def autenticar(self, nome: str, senha: str):
         cursor = self.conn.cursor()
-        cursor.execute('SELECT * FROM Usuario WHERE nome = ? AND senha = ?;', (nome, senha))
+        cursor.execute("SELECT * FROM Usuario WHERE nome = ? AND senha = ?;", (nome, senha))
         row = cursor.fetchone()
-        if row:
-            return Usuario(*row)
-        return None
+        return Usuario(*row) if row else None
 
     def listar_usuarios(self):
         cursor = self.conn.cursor()
         cursor.execute("SELECT * FROM Usuario")
         rows = cursor.fetchall()
-        return [{"id": row[0], "nome": row[1], "email": row[2]} for row in rows]
+        return [Usuario(id=row[0], nome=row[1], email=row[2], senha=row[3]) for row in rows]

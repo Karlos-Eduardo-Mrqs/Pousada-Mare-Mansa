@@ -28,7 +28,7 @@
 - A estrutura do projeto foi reorganizada para maior modularidade e legibilidade:
   - Criação das pastas `controllers`, `models` e `views`
   - Os arquivos foram redistribuídos conforme suas responsabilidades no padrão MVC
-  - A pasta `views` foi alterada, onde ao invês de ser uma única classe suporta todas as telas. Agora as telas estão separadas em arquivos separados ! 
+  - A pasta `views` foi alterada, onde ao invês de ser uma única classe suporta todas as telas. Agora as telas estão separadas em arquivos separados !
 
 ---
 
