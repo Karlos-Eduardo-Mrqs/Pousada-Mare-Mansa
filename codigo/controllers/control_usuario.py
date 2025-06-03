@@ -9,7 +9,7 @@ class Control_Usuario:
         try:
             cursor = self.conn.cursor()
             cursor.execute("""
-                CREATE TABLE IF NOT EXISTS Usuario (
+                CREATE TABLE IF NOT EXISTS usuarios (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     nome TEXT NOT NULL,
                     email TEXT NOT NULL UNIQUE,
@@ -17,26 +17,26 @@ class Control_Usuario:
                 );
             """)
             self.conn.commit()
-            print("✅ Tabela 'Usuario' verificada/criada com sucesso.")
+            print("✅ Tabela 'usuarios' verificada/criada com sucesso.")
         except sqlite3.Error as erro:
-            print(f"❌ Erro ao criar Tabela Usuario: {erro}")
-
+            print(f"❌ Erro ao criar Tabela usuarios: {erro}")
 
     def adicionar_usuario(self, nome: str, email: str, senha: str):
         cursor = self.conn.cursor()
         cursor.execute(
-            "INSERT INTO Usuario (nome, email, senha) VALUES (?, ?, ?);",(nome, email, senha)
+            "INSERT INTO usuarios (nome, email, senha) VALUES (?, ?, ?);",
+            (nome, email, senha)
         )
         self.conn.commit()
 
     def remover_usuario(self, id: int):
         cursor = self.conn.cursor()
-        cursor.execute("DELETE FROM Usuario WHERE id = ?;", (id,))
+        cursor.execute("DELETE FROM usuarios WHERE id = ?;", (id,))
         self.conn.commit()
 
     def autenticar(self, nome: str, senha: str):
         cursor = self.conn.cursor()
-        cursor.execute('SELECT * FROM Usuario WHERE nome = ? AND senha = ?;', (nome, senha))
+        cursor.execute('SELECT * FROM usuarios WHERE nome = ? AND senha = ?;', (nome, senha))
         row = cursor.fetchone()
         if row:
             return Usuario(*row)
@@ -44,6 +44,6 @@ class Control_Usuario:
 
     def listar_usuarios(self):
         cursor = self.conn.cursor()
-        cursor.execute("SELECT * FROM Usuario")
+        cursor.execute("SELECT * FROM usuarios")
         rows = cursor.fetchall()
         return [{"id": row[0], "nome": row[1], "email": row[2]} for row in rows]

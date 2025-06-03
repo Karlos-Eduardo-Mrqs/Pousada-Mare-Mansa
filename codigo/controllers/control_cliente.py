@@ -3,10 +3,10 @@ class Control_Cliente:
         self.conn = conn
     
     def criar_tabela(self):
-        """Cria a tabela Cliente no banco (se não existir)"""
+        """Cria a tabela clientes no banco (se não existir)"""
         cursor = self.conn.cursor()
         cursor.execute("""
-            CREATE TABLE IF NOT EXISTS Cliente (
+            CREATE TABLE IF NOT EXISTS clientes (
                 cpf TEXT PRIMARY KEY,
                 nome TEXT NOT NULL,
                 email TEXT
@@ -18,7 +18,7 @@ class Control_Cliente:
         """Adiciona um novo cliente ao banco"""
         cursor = self.conn.cursor()
         cursor.execute(
-            "INSERT INTO Cliente (cpf, nome, email) VALUES (?, ?, ?)",
+            "INSERT INTO clientes (cpf, nome, email) VALUES (?, ?, ?)",
             (cpf, nome, email)
         )
         self.conn.commit()
@@ -26,12 +26,12 @@ class Control_Cliente:
     def remover_cliente(self, cpf: str):
         """Remove um cliente pelo CPF"""
         cursor = self.conn.cursor()
-        cursor.execute("DELETE FROM Cliente WHERE cpf = ?", (cpf,))
+        cursor.execute("DELETE FROM clientes WHERE cpf = ?", (cpf,))
         self.conn.commit()
 
     def listar_clientes(self):
         """Lista todos os clientes cadastrados"""
         cursor = self.conn.cursor()
-        cursor.execute("SELECT * FROM Cliente")
+        cursor.execute("SELECT * FROM clientes")
         rows = cursor.fetchall()
         return [{"cpf": row[0], "nome": row[1], "email": row[2]} for row in rows]
