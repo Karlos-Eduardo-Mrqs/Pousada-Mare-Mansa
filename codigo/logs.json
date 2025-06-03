@@ -1,0 +1,9 @@
+[
+    {
+        "data": "2025-06-02 18:00:12",
+        "usuario": "Sistema",
+        "acao": "Falha ao carregar a imagem {erro}",
+        "tela": "Login.py",
+        "tipo": "WARN"
+    }
+]
