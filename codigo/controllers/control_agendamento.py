@@ -65,11 +65,6 @@ class Control_Agendamento:
             UPDATE agendamentos
             SET data_entrada = ?, data_saida = ?, cpf = ?, numero = ?
             WHERE id = ?
-        """, (
-            data_entrada.strftime("%d/%m/%Y"),
-            data_saida.strftime("%d/%m/%Y"),
-            cpf,
-            numero_quarto,
-            id_agendamento
+        """, (data_entrada.strftime("%d/%m/%Y"),data_saida.strftime("%d/%m/%Y"),cpf,numero_quarto,id_agendamento
         ))
         self.conn.commit()
