@@ -1,9 +1,8 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
-from form_agendamento import Forms_Agendamento
+from views.form_agendamento import Forms_Agendamento
 from controllers.control_agendamento import Control_Agendamento
 from controllers.control_quarto import Control_Quarto
-
 
 class TelaAgendamento:
     def __init__(self, root, app, conn):

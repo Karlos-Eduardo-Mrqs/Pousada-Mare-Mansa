@@ -26,5 +26,26 @@
         "acao": "login bem sucedido",
         "tela": "Login.py",
         "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-03 16:19:44",
+        "usuario": "Sistema",
+        "acao": "Usuário administrador criado automaticamente",
+        "tela": "Login.py",
+        "tipo": "AUDIT"
+    },
+    {
+        "data": "2025-06-03 16:19:52",
+        "usuario": "Sistema",
+        "acao": "login bem sucedido",
+        "tela": "Login.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-03 16:22:10",
+        "usuario": "Sistema",
+        "acao": "login bem sucedido",
+        "tela": "Login.py",
+        "tipo": "INFO"
     }
 ]

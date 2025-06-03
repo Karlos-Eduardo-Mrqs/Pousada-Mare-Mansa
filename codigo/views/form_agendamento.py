@@ -126,7 +126,7 @@ class Forms_Agendamento:
 
         if self.dados:  # edição
             id_agendamento = self.dados[0]
-            self.ctr_agendamento.atualizar_agendamento(id_agendamento, data_entrada, data_saida, cpf, numero_quarto)
+            self.ctr_agendamento.atualizar_agendamento(id_agendamento, data_entrada, data_saida, cpf, int(numero_quarto))
         else:  # criação
             self.ctr_agendamento.adicionar_agendamento(data_entrada, data_saida, cpf, numero_quarto)
 
