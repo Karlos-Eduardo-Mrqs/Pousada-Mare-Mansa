@@ -2,14 +2,15 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 from PIL import Image, ImageTk, ImageOps
 from models.logs_json import LoggerJSON
-from controllers.control_cliente import Control_Cliente
+from controllers.control_usuario import Control_Usuario
 
 class TelaLogin:
-    def __init__(self, root, app):
+    def __init__(self, root, app,conn):
         self.root = root
         self.app = app
+        self.conn = conn
         self.logger = LoggerJSON()
-        self.controller_usuario = Control_Cliente()  # Passado pelo main
+        self.controller_usuario = Control_Usuario(self.conn)  # Passado pelo main
         self.root.title("Tela de Login - Pousada Maré Mansa")
         self.root.geometry("700x500")
         self.root.configure(bg="#FAF1E4")
@@ -115,3 +116,8 @@ class TelaLogin:
             self.entry_username.delete(0, tk.END)
             self.entry_password.delete(0, tk.END)
             self.entry_username.focus()
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    TelaLogin(root, None, None)
+    root.mainloop()

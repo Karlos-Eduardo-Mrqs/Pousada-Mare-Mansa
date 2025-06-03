@@ -35,7 +35,7 @@ class TelasPousada:
     # Chamadas de telas
     def abrir_tela_login(self):
         self.limpar_tela()
-        TelaLogin(self.root, self)  # Passa self como app
+        TelaLogin(self.root, self, self.banco.conn)  # Passa self como app
 
     def abrir_tela_menu(self):
         self.limpar_tela()

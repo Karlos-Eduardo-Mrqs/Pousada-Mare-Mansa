@@ -1,0 +1,16 @@
+[
+    {
+        "data": "2025-06-03 15:12:14",
+        "usuario": "Sistema",
+        "acao": "Falha ao realizar login",
+        "tela": "Login.py",
+        "tipo": "ERROR"
+    },
+    {
+        "data": "2025-06-03 15:12:20",
+        "usuario": "Sistema",
+        "acao": "login bem sucedido",
+        "tela": "Login.py",
+        "tipo": "INFO"
+    }
+]
