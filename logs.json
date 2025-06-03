@@ -12,5 +12,19 @@
         "acao": "login bem sucedido",
         "tela": "Login.py",
         "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-03 15:19:43",
+        "usuario": "Sistema",
+        "acao": "Falha ao realizar login",
+        "tela": "Login.py",
+        "tipo": "ERROR"
+    },
+    {
+        "data": "2025-06-03 15:19:51",
+        "usuario": "Sistema",
+        "acao": "login bem sucedido",
+        "tela": "Login.py",
+        "tipo": "INFO"
     }
 ]

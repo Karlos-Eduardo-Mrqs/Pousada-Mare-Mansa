@@ -46,3 +46,8 @@ class Control_Quarto:
                 "tipo_id": row[3]
             } for row in rows
         ]
+
+    def atualizar_status_quarto(self, disponibilidade:bool, numero:int):
+        cursor = self.conn.cursor()
+        cursor.execute("UPDATE Quarto SET disponibilidade = ? WHERE numero = ?", (disponibilidade, numero))
+        self.conn.commit()

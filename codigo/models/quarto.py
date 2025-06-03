@@ -6,4 +6,4 @@ class Quarto:
     numero_quarto: int
     disponibilidade: bool
     capacidade: int
-    tipo: Tipo  
+    tipo: 'Tipo'  

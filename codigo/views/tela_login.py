@@ -68,13 +68,7 @@ class TelaLogin:
         style.configure("Custom.TCheckbutton", background="#FAF1E4", foreground="#333333", font=("Helvetica", 10))
 
         self.show_password = tk.BooleanVar()
-        show_btn = ttk.Checkbutton(
-            frame_login,
-            text="Mostrar senha",
-            variable=self.show_password,
-            command=self.toggle_password,
-            style="Custom.TCheckbutton"
-        )
+        show_btn = ttk.Checkbutton(frame_login,text="Mostrar senha",variable=self.show_password,command=self.toggle_password,style="Custom.TCheckbutton")
         show_btn.pack(pady=(0, 10))
 
         ttk.Button(frame_login, text="Logar", command=self.fazer_login).pack()
