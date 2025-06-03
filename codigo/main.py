@@ -1,10 +1,10 @@
 import tkinter as tk
 from controllers.banco import Banco
 
-# Importa as funções/modulares de interface
+# Importa as telas
 from views.tela_login import TelaLogin
 from views.tela_menu import TelaMenu
-from views.tela_agendamento import TelaAgendamento  # Nome genérico da função da tela CRUD
+from views.tela_agendamento import TelaAgendamento  # Tela CRUD agendamento
 from views.tela_logs import TelaLogs
 
 class TelasPousada:
@@ -13,12 +13,11 @@ class TelasPousada:
         self.root.geometry("500x400")
         self.root.title("Pousada Maré Mansa")
 
-        # Banco de dados e controladores
+        # Conexão banco e controladores
         self.banco = Banco()
         self.banco.conectar()
         self.banco.criar_tabelas()
 
-        # Controladores disponíveis para as telas
         self.agendamento_controller = self.banco.control_agendamento
         self.cliente_controller = self.banco.control_cliente
         self.quarto_controller = self.banco.control_quarto
@@ -31,19 +30,19 @@ class TelasPousada:
             return
         for widget in self.root.winfo_children():
             widget.destroy()
-    
-    # Chamadas de telas
+
     def abrir_tela_login(self):
         self.limpar_tela()
-        TelaLogin(self.root, self, self.banco.conn)  # Passa self como app
+        TelaLogin(self.root, self, self.banco.conn)
 
     def abrir_tela_menu(self):
         self.limpar_tela()
-        TelaMenu(self.root,self)
+        TelaMenu(self.root, self)
 
     def abrir_agendamentos(self):
         self.limpar_tela()
-        TelaAgendamento(self.root, self)
+        # Passa o controller de agendamento para a tela
+        TelaAgendamento(self.root, self, self.agendamento_controller)
 
     def abrir_logs(self):
         self.limpar_tela()
@@ -56,7 +55,6 @@ class TelasPousada:
         self.banco.desconectar()
         self.root.destroy()
 
-# Executa o app
 if __name__ == "__main__":
     root = tk.Tk()
     app = TelasPousada(root)

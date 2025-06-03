@@ -2,11 +2,10 @@ import sqlite3
 from datetime import date
 
 class Control_Agendamento:
-    def __init__(self, conn: sqlite3.Connection):
+    def __init__(self, conn):
         self.conn = conn
 
     def criar_tabela(self):
-        """Cria a tabela agendamentos no banco (se não existir)"""
         cursor = self.conn.cursor()
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS agendamentos (
@@ -22,27 +21,22 @@ class Control_Agendamento:
         self.conn.commit()
 
     def adicionar_agendamento(self, data_entrada: date, data_saida: date, cpf: str, numero_quarto: int):
-        """Adiciona um novo agendamento"""
         cursor = self.conn.cursor()
         cursor.execute(
             "INSERT INTO agendamentos (data_entrada, data_saida, cpf, numero) VALUES (?, ?, ?, ?)",
             (data_entrada.strftime("%d/%m/%Y"), data_saida.strftime("%d/%m/%Y"), cpf, numero_quarto)
         )
         self.conn.commit()
-        return cursor.lastrowid  # Retorna o ID do agendamento criado
+        return cursor.lastrowid
 
     def remover_agendamento(self, agendamento_id: int):
-        """Remove um agendamento pelo ID"""
         cursor = self.conn.cursor()
         cursor.execute("DELETE FROM agendamentos WHERE id = ?", (agendamento_id,))
         self.conn.commit()
 
     def listar_agendamentos(self):
-        """Lista todos os agendamentos cadastrados"""
         cursor = self.conn.cursor()
-        cursor.execute("""
-            SELECT id, data_entrada, data_saida, cpf, numero FROM agendamentos
-        """)
+        cursor.execute("SELECT id, data_entrada, data_saida, cpf, numero FROM agendamentos")
         rows = cursor.fetchall()
         return [
             {
@@ -53,3 +47,29 @@ class Control_Agendamento:
                 "numero_quarto": row[4]
             } for row in rows
         ]
+
+    def carregar_dados(self):
+        agendamentos = self.listar_agendamentos()
+        self.dados = []
+        for ag in agendamentos:
+            self.dados.append({
+                "id": ag["id"],
+                "nome": ag["cpf"],  # Ideal: buscar nome usando o controller de clientes
+                "data": f"{ag['data_entrada']} a {ag['data_saida']}",
+                "quarto": ag["numero_quarto"]
+            })
+
+    def atualizar_agendamento(self, id_agendamento: int, data_entrada: date, data_saida: date, cpf: str, numero_quarto: int):
+        cursor = self.conn.cursor()
+        cursor.execute("""
+            UPDATE agendamentos
+            SET data_entrada = ?, data_saida = ?, cpf = ?, numero = ?
+            WHERE id = ?
+        """, (
+            data_entrada.strftime("%d/%m/%Y"),
+            data_saida.strftime("%d/%m/%Y"),
+            cpf,
+            numero_quarto,
+            id_agendamento
+        ))
+        self.conn.commit()

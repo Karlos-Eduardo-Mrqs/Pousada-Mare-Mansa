@@ -1,16 +1,26 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
+from form_agendamento import Forms_Agendamento
+from controllers.control_agendamento import Control_Agendamento
+from controllers.control_quarto import Control_Quarto
+
 
 class TelaAgendamento:
-    def __init__(self, root, app):
-        self.root = root        # pega a janela raiz do controlador
-        self.app = app          # controlador para voltar ao menu
+    def __init__(self, root, app, conn):
+        self.root = root
+        self.app = app
+        self.conn = conn
+
+        self.ctr_agendamento = Control_Agendamento(self.conn)
+        self.ctr_quarto = Control_Quarto(self.conn)
+
         self.root.title("Agendamentos - Pousada Maré Mansa")
         self.root.geometry("800x500")
         self.root.configure(bg='#FCEBD5')
-        self.dados = []  # Simulação de banco
 
+        self.dados = []
         self.criar_interface()
+        self.carregar_dados()
 
     def criar_interface(self):
         # Topo
@@ -31,10 +41,10 @@ class TelaAgendamento:
         tk.Button(frame_pesquisa, text="Buscar", command=self.buscar_agendamento).pack(side=tk.LEFT)
 
         # Tabela
-        colunas = ("id", "nome", "data", "quarto")
+        colunas = ("id", "nome", "data_entrada", "data_saida", "quarto", "cpf", "email")
         self.tabela = ttk.Treeview(self.root, columns=colunas, show="headings", height=15)
         for col in colunas:
-            self.tabela.heading(col, text=col.capitalize())
+            self.tabela.heading(col, text=col.replace('_', ' ').capitalize())
             self.tabela.column(col, anchor=tk.CENTER)
 
         self.tabela.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
@@ -48,24 +58,47 @@ class TelaAgendamento:
         tk.Button(frame_botoes, text="Deletar", command=self.deletar_agendamento).pack(side=tk.LEFT, padx=10)
         tk.Button(frame_botoes, text="Voltar ao Menu", bg="#D9B08C", command=self.voltar_menu).pack(side=tk.LEFT, padx=10)
 
-    def buscar_agendamento(self):
-        termo = self.entrada_pesquisa.get().lower()
+    def carregar_dados(self):
+        self.dados = self.ctr_agendamento.listar_agendamentos()
+        self.atualizar_tabela(self.dados)
+
+    def atualizar_tabela(self, dados):
         for i in self.tabela.get_children():
             self.tabela.delete(i)
-        for dado in self.dados:
-            if termo in dado['nome'].lower():
-                self.tabela.insert('', tk.END, values=(dado['id'], dado['nome'], dado['data'], dado['quarto']))
+        for ag in dados:
+            self.tabela.insert('', tk.END, values=(
+                ag['id'], ag['nome'], ag['data_entrada'], ag['data_saida'],
+                ag['quarto'], ag['cpf'], ag['email']
+            ))
+
+    def buscar_agendamento(self):
+        termo = self.entrada_pesquisa.get().lower()
+        filtrados = [ag for ag in self.dados if termo in ag['nome'].lower()]
+        self.atualizar_tabela(filtrados)
 
     def criar_agendamento(self):
-        self.abrir_janela_agendamento("Criar")
+        Forms_Agendamento(self.root, self.conn, self.carregar_dados)
 
     def editar_agendamento(self):
         item = self.tabela.selection()
         if not item:
             messagebox.showwarning("Atenção", "Selecione um agendamento para editar.")
             return
-        valores = self.tabela.item(item[0])["values"]  # Usar item[0] aqui
-        self.abrir_janela_agendamento("Editar", valores)
+        valores = self.tabela.item(item[0])["values"]
+        dados_editar = {
+            'id': valores[0],
+            'nome': valores[1],
+            'data_entrada': valores[2],
+            'data_saida': valores[3],
+            'quarto': valores[4],
+            'cpf': valores[5],
+            'email': valores[6]
+        }
+        Forms_Agendamento(self.root, self.conn, self.carregar_dados, dados=(
+            dados_editar['id'], dados_editar['nome'], dados_editar['data_entrada'],
+            dados_editar['data_saida'], dados_editar['cpf'], dados_editar['email'],
+            dados_editar['quarto']
+        ))
 
     def deletar_agendamento(self):
         item = self.tabela.selection()
@@ -74,47 +107,16 @@ class TelaAgendamento:
             return
         resposta = messagebox.askyesno("Confirmação", "Tem certeza que deseja cancelar este agendamento?")
         if resposta:
-            valores = self.tabela.item(item[0])["values"]  # Usar item[0] aqui
-            self.dados = [d for d in self.dados if d['id'] != valores[0]]
-            self.buscar_agendamento()
+            valores = self.tabela.item(item[0])["values"]
+            id_agendamento = valores[0]
 
-    def abrir_janela_agendamento(self, modo, valores=None):
-        janela = tk.Toplevel(self.root)
-        janela.title(f"{modo} Agendamento")
-        janela.geometry("300x200")
-        janela.configure(bg='#FCEBD5')
+            # Deletar no banco
+            self.ctr_agendamento.remover_agendamento(int(id_agendamento))
 
-        campos = ['Nome', 'Data', 'Quarto']
-        entradas = {}
-
-        for i, campo in enumerate(campos):
-            tk.Label(janela, text=campo, bg='#FCEBD5').grid(row=i, column=0, pady=5, padx=5)
-            entrada = tk.Entry(janela)
-            entrada.grid(row=i, column=1, pady=5, padx=5)
-            entradas[campo.lower()] = entrada
-
-        if modo == "Editar" and valores:
-            entradas['nome'].insert(0, valores[1])
-            entradas['data'].insert(0, valores[2])
-            entradas['quarto'].insert(0, valores[3])
-
-        def salvar():
-            novo = {
-                'id': valores[0] if valores else len(self.dados) + 1,
-                'nome': entradas['nome'].get(),
-                'data': entradas['data'].get(),
-                'quarto': entradas['quarto'].get()
-            }
-            if modo == "Criar":
-                self.dados.append(novo)
-            else:
-                for i, d in enumerate(self.dados):
-                    if d['id'] == novo['id']:
-                        self.dados[i] = novo
-            self.buscar_agendamento()
-            janela.destroy()
-
-        tk.Button(janela, text="Salvar", command=salvar).grid(row=4, columnspan=2, pady=10)
+            # Atualiza status do quarto para disponível
+            numero_quarto = valores[4]
+            self.ctr_quarto.atualizar_status_quarto(True, int(numero_quarto))
+            self.carregar_dados()
 
     def voltar_menu(self):
         self.app.voltar_menu()
@@ -122,5 +124,5 @@ class TelaAgendamento:
 # Exemplo de execução do app (com controlador fictício)
 if __name__ == "__main__":
     root = tk.Tk()
-    TelaAgendamento(root, None)
+    TelaAgendamento(root, None, None)
     root.mainloop()

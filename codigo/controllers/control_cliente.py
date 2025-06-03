@@ -35,3 +35,12 @@ class Control_Cliente:
         cursor.execute("SELECT * FROM clientes")
         rows = cursor.fetchall()
         return [{"cpf": row[0], "nome": row[1], "email": row[2]} for row in rows]
+
+    def buscar_cliente_por_cpf(self, cpf: str):
+        """Retorna o cliente do CPF informado"""
+        cursor = self.conn.cursor()
+        cursor.execute("SELECT * FROM clientes WHERE cpf = ?", (cpf,))
+        resultado = cursor.fetchone()
+        if resultado:
+            return {"cpf": resultado[0], "nome": resultado[1], "email": resultado[2]}
+        return None

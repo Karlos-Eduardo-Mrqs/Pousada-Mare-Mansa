@@ -1,7 +1,7 @@
 import sqlite3
 
 class Control_Tipo:
-    def __init__(self, conn: sqlite3.Connection):
+    def __init__(self, conn):
         self.conn = conn
 
     def criar_tabela(self):
