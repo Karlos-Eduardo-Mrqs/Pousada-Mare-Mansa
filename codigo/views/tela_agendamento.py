@@ -39,11 +39,22 @@ class TelaAgendamento:
         self.entrada_pesquisa.pack(side=tk.LEFT, padx=5)
         tk.Button(frame_pesquisa, text="Buscar", command=self.buscar_agendamento).pack(side=tk.LEFT)
 
-        # Tabela
-        colunas = ("id", "nome", "data_entrada", "data_saida", "quarto", "cpf", "email")
+        # Tabela (com id oculto)
+        colunas = ("nome", "email", "data_entrada", "data_saida", "quarto", "tipo", "preco")
         self.tabela = ttk.Treeview(self.root, columns=colunas, show="headings", height=15)
+
+        nomes_colunas = {
+            "nome": "Nome",
+            "email": "Email",
+            "data_entrada": "Data de Entrada",
+            "data_saida": "Data de Saída",
+            "quarto": "Quarto",
+            "tipo": "Tipo",
+            "preco": "Preço (R$)"
+        }
+
         for col in colunas:
-            self.tabela.heading(col, text=col.replace('_', ' ').capitalize())
+            self.tabela.heading(col, text=nomes_colunas[col])
             self.tabela.column(col, anchor=tk.CENTER)
 
         self.tabela.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
@@ -66,8 +77,8 @@ class TelaAgendamento:
             self.tabela.delete(i)
         for ag in dados:
             self.tabela.insert('', tk.END, values=(
-                ag['id'], ag['nome'], ag['data_entrada'], ag['data_saida'],
-                ag['quarto'], ag['cpf'], ag['email']
+                ag['nome'], ag['email'], ag['data_entrada'], ag['data_saida'],
+                ag['quarto'], ag['tipo'], f"{ag['preco']:.2f}"
             ))
 
     def buscar_agendamento(self):
@@ -84,20 +95,16 @@ class TelaAgendamento:
             messagebox.showwarning("Atenção", "Selecione um agendamento para editar.")
             return
         valores = self.tabela.item(item[0])["values"]
-        dados_editar = {
-            'id': valores[0],
-            'nome': valores[1],
-            'data_entrada': valores[2],
-            'data_saida': valores[3],
-            'quarto': valores[4],
-            'cpf': valores[5],
-            'email': valores[6]
-        }
-        Forms_Agendamento(self.root, self.conn, self.carregar_dados, dados=(
-            dados_editar['id'], dados_editar['nome'], dados_editar['data_entrada'],
-            dados_editar['data_saida'], dados_editar['cpf'], dados_editar['email'],
-            dados_editar['quarto']
-        ))
+
+        agendamento = next((ag for ag in self.dados if
+                            ag['nome'] == valores[0] and ag['email'] == valores[1]), None)
+
+        if agendamento:
+            Forms_Agendamento(self.root, self.conn, self.carregar_dados, dados=(
+                agendamento['id'], agendamento['nome'], agendamento['data_entrada'],
+                agendamento['data_saida'], agendamento['cpf'], agendamento['email'],
+                agendamento['quarto']
+            ))
 
     def deletar_agendamento(self):
         item = self.tabela.selection()
@@ -107,20 +114,17 @@ class TelaAgendamento:
         resposta = messagebox.askyesno("Confirmação", "Tem certeza que deseja cancelar este agendamento?")
         if resposta:
             valores = self.tabela.item(item[0])["values"]
-            id_agendamento = valores[0]
-
-            # Deletar no banco
-            self.ctr_agendamento.remover_agendamento(int(id_agendamento))
-
-            # Atualiza status do quarto para disponível
-            numero_quarto = valores[4]
-            self.ctr_quarto.atualizar_status_quarto(True, int(numero_quarto))
-            self.carregar_dados()
+            agendamento = next((ag for ag in self.dados if
+                                ag['nome'] == valores[0] and ag['email'] == valores[1]), None)
+            if agendamento:
+                self.ctr_agendamento.remover_agendamento(int(agendamento['id']))
+                self.ctr_quarto.atualizar_status_quarto(True, int(agendamento['quarto']))
+                self.carregar_dados()
 
     def voltar_menu(self):
         self.app.voltar_menu()
 
-# Exemplo de execução do app (com controlador fictício)
+# Execução de teste (comentado para uso real)
 if __name__ == "__main__":
     root = tk.Tk()
     TelaAgendamento(root, None, None)

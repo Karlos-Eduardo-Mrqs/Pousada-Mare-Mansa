@@ -25,7 +25,7 @@ class Control_Agendamento:
         cursor = self.conn.cursor()
         cursor.execute(
             "INSERT INTO agendamentos (data_entrada, data_saida, cpf, numero) VALUES (?, ?, ?, ?)",
-            (data_entrada.strftime("%d/%m/%Y"), data_saida.strftime("%d/%m/%Y"), cpf, numero_quarto)
+            (data_entrada, data_saida, cpf, numero_quarto)
         )
         self.conn.commit()
         return cursor.lastrowid
@@ -37,28 +37,19 @@ class Control_Agendamento:
         self.conn.commit()
 
     def listar_agendamentos(self):
-        """Lista todos os agendamentos com nome e email do cliente"""
         cursor = self.conn.cursor()
-        cursor.execute("""
-            SELECT 
-                ag.id, ag.data_entrada, ag.data_saida,
-                cl.nome, cl.cpf, cl.email,
-                ag.numero
-            FROM agendamentos ag
-            LEFT JOIN clientes cl ON ag.cpf = cl.cpf
-        """)
-        rows = cursor.fetchall()
-        return [
-            {
-                "id": row[0],
-                "data_entrada": row[1],
-                "data_saida": row[2],
-                "nome": row[3] or "Desconhecido",
-                "cpf": row[4],
-                "email": row[5] or "",
-                "quarto": row[6]
-            } for row in rows
-        ]
+        cursor.execute('''
+            SELECT
+                a.id, c.nome, c.email, c.cpf, a.data_entrada, a.data_saida,
+                q.numero_quarto, q.tipo_id, q.preco
+            FROM agendamentos a
+            JOIN clientes c ON a.cliente_id = c.id
+            JOIN quartos q ON a.quarto = q.numero_quarto
+        ''')
+
+        resultados = cursor.fetchall()
+        colunas = [desc[0] for desc in cursor.description]
+        return [dict(zip(colunas, linha)) for linha in resultados]
 
     def carregar_dados(self):
         agendamentos = self.listar_agendamentos()

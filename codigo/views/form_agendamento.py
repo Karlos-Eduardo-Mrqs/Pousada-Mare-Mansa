@@ -53,7 +53,7 @@ class Forms_Agendamento:
 
         # Lista quartos disponíveis
         lista = self.ctr_quarto.listar_quartos()
-        quartos_disponiveis = [str(row['numero']) for row in lista if row['disponibilidade']]
+        quartos_disponiveis = [str(row['numero']) for row in lista if row.get('disponibilidade', False)]
         tk.Label(self.janela, text="Quarto:", bg='#FCEBD5').grid(row=5, column=0, padx=5, pady=5, sticky='e')
         self.entry_quarto = ttk.Combobox(self.janela, values=quartos_disponiveis)
         self.entry_quarto.grid(row=5, column=1, padx=5, pady=5)

@@ -1,6 +1,5 @@
 import tkinter as tk
 from controllers.banco import Banco
-
 from views.tela_login import TelaLogin
 from views.tela_menu import TelaMenu
 from views.tela_agendamento import TelaAgendamento
@@ -12,17 +11,14 @@ class TelasPousada:
         self.root.geometry("500x400")
         self.root.title("Pousada Maré Mansa")
 
-        # Instancia Banco e conecta
         self.banco = Banco()
-        self.banco.conectar()         # conecta e inicializa controladores
-        self.banco.inserir_dados_iniciais    # cria tabelas usando controladores
+        self.banco.conectar()
+        self.banco.criar_tabelas()
 
-        # Pega controladores prontos para uso
         self.agendamento_controller = self.banco.control_agendamento
         self.cliente_controller = self.banco.control_cliente
         self.quarto_controller = self.banco.control_quarto
 
-        # Tela inicial
         self.abrir_tela_login()
 
     def limpar_tela(self):
