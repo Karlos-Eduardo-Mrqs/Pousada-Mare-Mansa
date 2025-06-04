@@ -83,7 +83,9 @@ class TelaAgendamento:
         self.atualizar_tabela(filtrados)
 
     def criar_agendamento(self):
-        FormsAgendamento(self.root, self.conn, self.carregar_dados)
+        FormsAgendamento(self.root, self.conn)
+        self.root.wait_window()  # Espera o formulário fechar
+        self.carregar_dados()
 
     def editar_agendamento(self):
         item = self.tabela.selection()
@@ -107,27 +109,23 @@ class TelaAgendamento:
                     agendamento['quarto_id']
                 )
             )
+            self.root.wait_window()
+            self.carregar_dados()
 
     def deletar_agendamento(self):
         item = self.tabela.selection()
         if not item:
             messagebox.showwarning("Atenção", "Selecione um agendamento para deletar.")
             return
-        resposta = messagebox.askyesno("Confirmação", "Tem certeza que deseja cancelar este agendamento?")
-        if resposta:
-            valores = self.tabela.item(item[0])["values"]
-            agendamento = next((ag for ag in self.dados if
-                                ag['nome'] == valores[0] and ag['email'] == valores[1]), None)
-            if agendamento:
-                self.ctr_agendamento.remover_agendamento(int(agendamento['id']))
-                self.ctr_quarto.atualizar_status_quarto(True, int(agendamento['quarto_id']))
+        valores = self.tabela.item(item[0])["values"]
+        agendamento = next((ag for ag in self.dados if
+                            ag['nome'] == valores[0] and ag['email'] == valores[1]), None)
+        if agendamento:
+            confirm = messagebox.askyesno("Confirmação", "Tem certeza que deseja deletar este agendamento?")
+            if confirm:
+                self.ctr_agendamento.remover_agendamento(agendamento['id'])
                 self.carregar_dados()
 
     def voltar_menu(self):
-        self.app.voltar_menu()
-
-# Execução de teste (comentado para uso real)
-if __name__ == "__main__":
-    root = tk.Tk()
-    TelaAgendamento(root, None, None)
-    root.mainloop()
+        self.root.destroy()
+        self.app.mostrar_menu_principal()

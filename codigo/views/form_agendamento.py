@@ -12,7 +12,7 @@ class FormsAgendamento:
     def __init__(self, parent, conn, dados_iniciais=None):
         self.parent = parent
         self.conn = conn
-        self.dados_iniciais = dados_iniciais  # se passado, é edição
+        self.dados_iniciais = dados_iniciais
 
         self.ctr_cliente = Control_Cliente(self.conn)
         self.ctr_quarto = Control_Quarto(self.conn)
@@ -46,12 +46,12 @@ class FormsAgendamento:
         self.entry_email = tk.Entry(self.janela)
         self.entry_email.grid(row=2, column=1, padx=5, pady=5)
 
-        # Data de entrada
+        # Data entrada
         tk.Label(self.janela, text="Data entrada:", bg="#FCEBD5").grid(row=3, column=0, padx=5, pady=5, sticky="e")
         self.entry_check_in = DateEntry(self.janela, date_pattern="dd/mm/yyyy")
         self.entry_check_in.grid(row=3, column=1, padx=5, pady=5)
 
-        # Data de saída
+        # Data saída
         tk.Label(self.janela, text="Data saída:", bg="#FCEBD5").grid(row=4, column=0, padx=5, pady=5, sticky="e")
         self.entry_check_out = DateEntry(self.janela, date_pattern="dd/mm/yyyy")
         self.entry_check_out.grid(row=4, column=1, padx=5, pady=5)
@@ -68,15 +68,14 @@ class FormsAgendamento:
         tk.Button(self.janela, text="Cancelar", command=self.janela.destroy).grid(row=6, column=1, padx=5, pady=15, sticky="w")
 
     def _preencher_dados(self):
-        if not self.dados_iniciais:
-            return
         id_ag, nome, entrada, saida, cpf, email, numero_quarto = self.dados_iniciais
         self.entry_cpf.insert(0, cpf)
         self.entry_nome.insert(0, nome)
         self.entry_email.insert(0, email)
-        self.entry_check_in.set_date(datetime.strptime(entrada, "%Y-%m-%d"))
-        self.entry_check_out.set_date(datetime.strptime(saida, "%Y-%m-%d"))
+        self.entry_check_in.set_date(datetime.strptime(entrada, "%d/%m/%Y"))
+        self.entry_check_out.set_date(datetime.strptime(saida, "%d/%m/%Y"))
         self.entry_quarto.set(str(numero_quarto))
+
 
     def _buscar_cliente(self, event=None):
         cpf = self.entry_cpf.get().strip()
@@ -84,62 +83,39 @@ class FormsAgendamento:
             cliente = self.ctr_cliente.buscar_cliente_por_cpf(cpf)
             if cliente:
                 self.entry_nome.delete(0, tk.END)
-                self.entry_nome.insert(0, cliente["nome"])
                 self.entry_email.delete(0, tk.END)
-                self.entry_email.insert(0, cliente["email"])
+                self.entry_nome.insert(0, cliente['nome'])
+                self.entry_email.insert(0, cliente['email'])
             else:
-                messagebox.showinfo("Info", "Cliente não encontrado.")
+                messagebox.showinfo("Aviso", "Cliente não encontrado.")
 
     def _salvar(self):
         cpf = self.entry_cpf.get().strip()
         nome = self.entry_nome.get().strip()
         email = self.entry_email.get().strip()
-        entrada = self.entry_check_in.get_date()
-        saida = self.entry_check_out.get_date()
-        quarto_str = self.entry_quarto.get()
+        numero_quarto = self.entry_quarto.get().strip()
 
-        if not all([cpf, nome, email, entrada, saida, quarto_str]):
-            messagebox.showwarning("Aviso", "Preencha todos os campos.")
-            return
+        # Converte datas de string para datetime.date
+        data_entrada = datetime.strptime(self.entry_check_in.get(), "%d/%m/%Y").date()
+        data_saida = datetime.strptime(self.entry_check_out.get(), "%d/%m/%Y").date()
 
-        if saida <= entrada:
-            messagebox.showwarning("Aviso", "Data de saída deve ser posterior à data de entrada.")
+        # Validações básicas
+        if not (cpf and nome and email and numero_quarto):
+            messagebox.showerror("Erro", "Todos os campos devem ser preenchidos.")
             return
 
         try:
-            numero_quarto = int(quarto_str)
-        except ValueError:
-            messagebox.showwarning("Aviso", "Número de quarto inválido.")
-            return
-
-        # Garantir existência das tabelas
-        self.ctr_cliente.criar_tabela()
-        self.ctr_quarto.criar_tabela()
-        self.ctr_agendamento.criar_tabela()
-
-        # Adicionar cliente caso não exista
-        if not self.ctr_cliente.buscar_cliente_por_cpf(cpf):
-            self.ctr_cliente.adicionar_cliente(cpf, nome, email)
-
-        # Valida disponibilidade do quarto
-        if not self.dados_iniciais or (self.dados_iniciais and int(self.dados_iniciais[6]) != numero_quarto):
-            quarto_info = self.ctr_quarto.buscar_quarto_por_numero(numero_quarto)
-            if not quarto_info or not quarto_info.get("disponibilidade", True):
-                messagebox.showwarning("Aviso", "Quarto não está disponível.")
-                return
-
-        if self.dados_iniciais:
-            id_ag = self.dados_iniciais[0]
-            self.ctr_agendamento.atualizar_agendamento(id_ag, entrada.strftime("%Y-%m-%d"), saida.strftime("%Y-%m-%d"), cpf, numero_quarto)
-        else:
-            self.ctr_agendamento.adicionar_agendamento(entrada.strftime("%Y-%m-%d"), saida.strftime("%Y-%m-%d"), cpf, numero_quarto)
-
-        # Atualizar status do quarto
-        self.ctr_quarto.atualizar_status_quarto(False, numero_quarto)
-
-        # Liberar quarto anterior se alterado
-        if self.dados_iniciais and int(self.dados_iniciais[6]) != numero_quarto:
-            self.ctr_quarto.atualizar_status_quarto(True, int(self.dados_iniciais[6]))
-
-        messagebox.showinfo("Sucesso", "Agendamento salvo com sucesso!")
-        self.janela.destroy()
+            if self.dados_iniciais:
+                id_agendamento = self.dados_iniciais[0]
+                self.ctr_agendamento.atualizar_agendamento(
+                    id_agendamento, data_entrada, data_saida, cpf, int(numero_quarto)
+                )
+                messagebox.showinfo("Sucesso", "Agendamento atualizado com sucesso!")
+            else:
+                self.ctr_agendamento.adicionar_agendamento(
+                    data_entrada, data_saida, cpf, int(numero_quarto)
+                )
+                messagebox.showinfo("Sucesso", "Agendamento cadastrado com sucesso!")
+            self.janela.destroy()
+        except Exception as e:
+            messagebox.showerror("Erro", str(e))

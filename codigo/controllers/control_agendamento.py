@@ -78,3 +78,19 @@ class Control_Agendamento:
             WHERE id = ?
         """, (data_entrada, data_saida, cpf, numero_quarto, id_agendamento))
         self.conn.commit()
+
+    def verificar_disponibilidade(self, numero_quarto: int, data_entrada: date, data_saida: date, ignorar_id: int) -> bool:
+        cursor = self.conn.cursor()
+        query = """
+            SELECT COUNT(*) FROM agendamentos 
+            WHERE numero_quarto = ?
+            AND data_saida > ?
+            AND data_entrada < ?
+        """
+        params = [numero_quarto, data_entrada, data_saida]
+        if ignorar_id:
+            query += " AND id != ?"
+            params.append(ignorar_id)
+
+        cursor.execute(query, params)
+        return cursor.fetchone()[0] == 0
