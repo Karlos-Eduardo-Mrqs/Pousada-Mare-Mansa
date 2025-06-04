@@ -5,6 +5,7 @@ from controllers.control_cliente import Control_Cliente
 from controllers.control_tipo import Control_Tipo
 from controllers.control_quarto import Control_Quarto
 from controllers.control_agendamento import Control_Agendamento
+from datetime import datetime
 
 class Forms_Agendamento:
     def __init__(self, parent, conn, callback, dados=None):
@@ -15,7 +16,7 @@ class Forms_Agendamento:
 
         self.ctr_quarto = Control_Quarto(self.conn)
         self.ctr_cliente = Control_Cliente(self.conn)
-        self.ctr_tipo = Control_Tipo(self.conn)
+        self.ctr_tipo = Control_Tipo(self.conn)  # caso precise depois
         self.ctr_agendamento = Control_Agendamento(self.conn)
 
         self.janela = tk.Toplevel(self.parent)
@@ -53,9 +54,9 @@ class Forms_Agendamento:
 
         # Lista quartos disponíveis
         lista = self.ctr_quarto.listar_quartos()
-        quartos_disponiveis = [str(row['numero']) for row in lista if row.get('disponibilidade', False)]
+        quartos_disponiveis = [str(row['numero']) for row in lista if row.get('disponibilidade', True)]
         tk.Label(self.janela, text="Quarto:", bg='#FCEBD5').grid(row=5, column=0, padx=5, pady=5, sticky='e')
-        self.entry_quarto = ttk.Combobox(self.janela, values=quartos_disponiveis)
+        self.entry_quarto = ttk.Combobox(self.janela, values=quartos_disponiveis, state="readonly")
         self.entry_quarto.grid(row=5, column=1, padx=5, pady=5)
 
         # Botões
@@ -80,12 +81,12 @@ class Forms_Agendamento:
         self.entry_cpf.insert(0, cpf)
         self.entry_nome.insert(0, nome)
         self.entry_email.insert(0, email)
-        self.entry_check_in.set_date(data_entrada)
-        self.entry_check_out.set_date(data_saida)
+        self.entry_check_in.set_date(datetime.strptime(data_entrada, "%Y-%m-%d"))
+        self.entry_check_out.set_date(datetime.strptime(data_saida, "%Y-%m-%d"))
         self.entry_quarto.set(quarto)
 
     def buscar_cliente(self, event):
-        cpf = self.entry_cpf.get()
+        cpf = self.entry_cpf.get().strip()
         if cpf:
             cliente = self.ctr_cliente.buscar_cliente_por_cpf(cpf)
             if cliente:
@@ -97,16 +98,20 @@ class Forms_Agendamento:
                 messagebox.showinfo("Info", "Cliente não encontrado.")
 
     def btn_salvar(self):
-        cpf = self.entry_cpf.get()
-        nome = self.entry_nome.get()
-        email = self.entry_email.get()
-        data_entrada = self.entry_check_in.get()
-        data_saida = self.entry_check_out.get()
+        cpf = self.entry_cpf.get().strip()
+        nome = self.entry_nome.get().strip()
+        email = self.entry_email.get().strip()
+        data_entrada = self.entry_check_in.get_date()
+        data_saida = self.entry_check_out.get_date()
         quarto_str = self.entry_quarto.get()
 
         # Validar campos
         if not all([cpf, nome, email, data_entrada, data_saida, quarto_str]):
             messagebox.showwarning("Aviso", "Preencha todos os campos.")
+            return
+
+        if data_saida <= data_entrada:
+            messagebox.showwarning("Aviso", "Data de saída deve ser posterior à data de entrada.")
             return
 
         try:
@@ -115,23 +120,39 @@ class Forms_Agendamento:
             messagebox.showwarning("Aviso", "Número do quarto inválido.")
             return
 
+        # Criar tabela se não existir
+        self.ctr_cliente.criar_tabela()
+        self.ctr_agendamento.criar_tabela()
+        self.ctr_quarto.criar_tabela()
+
         # Criar cliente se não existir
         cliente = self.ctr_cliente.buscar_cliente_por_cpf(cpf)
         if cliente is None:
-            self.ctr_cliente.criar_tabela()
             self.ctr_cliente.adicionar_cliente(cpf, nome, email)
+        else:
+            # Atualizar dados do cliente se desejar (opcional)
+            pass
+
+        # Verifica se o quarto está disponível (se edição, pode manter mesmo quarto)
+        if not self.dados or (self.dados and int(self.dados[6]) != numero_quarto):
+            quarto_info = self.ctr_quarto.buscar_quarto_por_numero(numero_quarto)
+            if not quarto_info or not quarto_info.get('disponibilidade', True):
+                messagebox.showwarning("Aviso", "Quarto selecionado não está disponível.")
+                return
 
         # Criar ou atualizar agendamento
-        self.ctr_agendamento.criar_tabela()
-
         if self.dados:  # edição
             id_agendamento = self.dados[0]
-            self.ctr_agendamento.atualizar_agendamento(id_agendamento, data_entrada, data_saida, cpf, int(numero_quarto))
+            self.ctr_agendamento.atualizar_agendamento(id_agendamento, data_entrada.strftime("%Y-%m-%d"), data_saida.strftime("%Y-%m-%d"), cpf, numero_quarto)
         else:  # criação
-            self.ctr_agendamento.adicionar_agendamento(data_entrada, data_saida, cpf, numero_quarto)
+            self.ctr_agendamento.adicionar_agendamento(data_entrada.strftime("%Y-%m-%d"), data_saida.strftime("%Y-%m-%d"), cpf, numero_quarto)
 
         # Atualiza status do quarto (marca como indisponível)
         self.ctr_quarto.atualizar_status_quarto(False, numero_quarto)
+
+        # Se edição e mudou o quarto, libera o anterior
+        if self.dados and int(self.dados[6]) != numero_quarto:
+            self.ctr_quarto.atualizar_status_quarto(True, int(self.dados[6]))
 
         messagebox.showinfo("Sucesso", "Agendamento salvo com sucesso!")
 

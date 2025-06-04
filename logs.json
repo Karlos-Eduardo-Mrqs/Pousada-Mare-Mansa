@@ -117,5 +117,47 @@
         "acao": "login bem sucedido",
         "tela": "Login.py",
         "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-03 22:35:34",
+        "usuario": "Sistema",
+        "acao": "login bem sucedido",
+        "tela": "Login.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-03 22:38:23",
+        "usuario": "Sistema",
+        "acao": "login bem sucedido",
+        "tela": "Login.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-03 22:40:50",
+        "usuario": "Sistema",
+        "acao": "login bem sucedido",
+        "tela": "Login.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-03 22:44:16",
+        "usuario": "Sistema",
+        "acao": "login bem sucedido",
+        "tela": "Login.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-03 22:52:05",
+        "usuario": "Sistema",
+        "acao": "login bem sucedido",
+        "tela": "Login.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-03 22:53:43",
+        "usuario": "Sistema",
+        "acao": "login bem sucedido",
+        "tela": "Login.py",
+        "tipo": "INFO"
     }
 ]

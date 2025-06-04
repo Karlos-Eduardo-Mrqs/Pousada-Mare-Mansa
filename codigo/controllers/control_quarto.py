@@ -8,10 +8,10 @@ class Control_Quarto:
         cursor = self.conn.cursor()
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS quartos (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                tipo TEXT NOT NULL,
-                preco REAL NOT NULL,
-                status INTEGER NOT NULL
+                numero_quarto INTEGER PRIMARY KEY,
+                disponibilidade INTEGER NOT NULL,
+                capacidade INTEGER NOT NULL,
+                tipo_id INTEGER NOT NULL
             )
         ''')
         self.conn.commit()
@@ -43,3 +43,20 @@ class Control_Quarto:
             (int(disponivel), numero_quarto)
         )
         self.conn.commit()
+    
+    def buscar_quarto_por_numero(self, id_quarto: int):
+        cursor = self.conn.cursor()
+        cursor.execute(
+            "SELECT numero_quarto, disponibilidade, capacidade, tipo_id FROM quartos WHERE numero_quarto = ?", 
+            (id_quarto,) 
+        )
+        row = cursor.fetchone()
+        if row:
+            return {
+                "numero": row[0],
+                "disponibilidade": row[1],
+                "capacidade": row[2],
+                "tipo_id": row[3]
+            }
+        else:
+            return None

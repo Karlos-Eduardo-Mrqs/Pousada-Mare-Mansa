@@ -40,7 +40,7 @@ class TelaAgendamento:
         tk.Button(frame_pesquisa, text="Buscar", command=self.buscar_agendamento).pack(side=tk.LEFT)
 
         # Tabela (com id oculto)
-        colunas = ("nome", "email", "data_entrada", "data_saida", "quarto", "tipo", "preco")
+        colunas = ("nome", "email", "data_entrada", "data_saida", "quarto_id", "tipo", "preco")
         self.tabela = ttk.Treeview(self.root, columns=colunas, show="headings", height=15)
 
         nomes_colunas = {
@@ -48,7 +48,7 @@ class TelaAgendamento:
             "email": "Email",
             "data_entrada": "Data de Entrada",
             "data_saida": "Data de Saída",
-            "quarto": "Quarto",
+            "quarto_id": "Quarto",
             "tipo": "Tipo",
             "preco": "Preço (R$)"
         }
@@ -78,7 +78,7 @@ class TelaAgendamento:
         for ag in dados:
             self.tabela.insert('', tk.END, values=(
                 ag['nome'], ag['email'], ag['data_entrada'], ag['data_saida'],
-                ag['quarto'], ag['tipo'], f"{ag['preco']:.2f}"
+                ag['quarto_id'], ag['tipo'], f"{ag['preco']:.2f}"
             ))
 
     def buscar_agendamento(self):
@@ -103,7 +103,7 @@ class TelaAgendamento:
             Forms_Agendamento(self.root, self.conn, self.carregar_dados, dados=(
                 agendamento['id'], agendamento['nome'], agendamento['data_entrada'],
                 agendamento['data_saida'], agendamento['cpf'], agendamento['email'],
-                agendamento['quarto']
+                agendamento['quarto_id']
             ))
 
     def deletar_agendamento(self):
@@ -118,7 +118,7 @@ class TelaAgendamento:
                                 ag['nome'] == valores[0] and ag['email'] == valores[1]), None)
             if agendamento:
                 self.ctr_agendamento.remover_agendamento(int(agendamento['id']))
-                self.ctr_quarto.atualizar_status_quarto(True, int(agendamento['quarto']))
+                self.ctr_quarto.atualizar_status_quarto(True, int(agendamento['quarto_id']))
                 self.carregar_dados()
 
     def voltar_menu(self):
