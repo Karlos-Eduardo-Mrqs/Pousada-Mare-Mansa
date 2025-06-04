@@ -13,11 +13,11 @@ class Control_Agendamento:
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 data_entrada TEXT NOT NULL,
                 data_saida TEXT NOT NULL,
-                cpf TEXT,
-                quarto_id INTEGER,
-                FOREIGN KEY(cpf) REFERENCES clientes(cpf),
-                FOREIGN KEY(quarto_id) REFERENCES quartos(numero_quarto)
-            )
+                cliente_cpf TEXT NOT NULL,
+                numero_quarto INTEGER NOT NULL,
+                FOREIGN KEY (cliente_cpf) REFERENCES clientes(cpf),
+                FOREIGN KEY (numero_quarto) REFERENCES quartos(numero_quarto)
+            );
         """)
         self.conn.commit()
 
@@ -25,7 +25,7 @@ class Control_Agendamento:
         """Adiciona um novo agendamento e retorna o id criado"""
         cursor = self.conn.cursor()
         cursor.execute(
-            "INSERT INTO agendamentos (data_entrada, data_saida, cpf, quarto_id) VALUES (?, ?, ?, ?)",
+            "INSERT INTO agendamentos (data_entrada, data_saida, cliente_cpf, numero_quarto) VALUES (?, ?, ?, ?)",
             (data_entrada, data_saida, cpf, numero_quarto)
         )
         self.conn.commit()
@@ -37,31 +37,24 @@ class Control_Agendamento:
         cursor.execute("DELETE FROM agendamentos WHERE id = ?", (agendamento_id,))
         self.conn.commit()
 
-    def listar_agendamentos(self) -> List[Dict]:
-        """Retorna uma lista de agendamentos com dados completos"""
+    def listar_agendamentos(self):
         cursor = self.conn.cursor()
         query = '''
-            SELECT ag.id, cl.nome, ag.data_entrada, ag.data_saida, cl.cpf, cl.email, ag.numero_quarto
-            FROM agendamentos ag JOIN clientes cl ON ag.cliente_cpf = cl.cpf
+            SELECT 
+                ag.id,
+                ag.data_entrada,
+                ag.data_saida,
+                cl.nome AS cliente_nome,
+                qt.numero_quarto,
+                tp.nome AS tipo_quarto
+            FROM agendamentos ag
+            JOIN clientes cl ON ag.cliente_cpf = cl.cpf
+            JOIN quartos qt ON ag.numero_quarto = qt.numero_quarto
+            JOIN tipos tp ON qt.tipo_id = tp.id
         '''
-
         cursor.execute(query)
-        rows = cursor.fetchall()
-
-        agendamentos = []
-        for row in rows:
-            agendamentos.append({
-                'id': row[0],
-                'nome': row[1],
-                'email': row[2],
-                'data_entrada': row[3],
-                'data_saida': row[4],
-                'cpf': row[5],
-                'quarto': row[6],
-                'tipo': row[7],
-                'preco': float(row[8]),
-            })
-        return agendamentos
+        resultado = cursor.fetchall()
+        return resultado
 
     def carregar_dados(self) -> List[Dict]:
         """Carrega dados formatados para a interface"""
@@ -70,9 +63,9 @@ class Control_Agendamento:
         for ag in agendamentos:
             dados_formatados.append({
                 "id": ag["id"],
-                "nome": ag["nome"],
+                "nome": ag["cliente_nome"],
                 "data": f"{ag['data_entrada']} a {ag['data_saida']}",
-                "quarto": ag["quarto"]
+                "quarto": f"{ag['numero_quarto']} - {ag['tipo_quarto']}"
             })
         return dados_formatados
 
@@ -81,7 +74,7 @@ class Control_Agendamento:
         cursor = self.conn.cursor()
         cursor.execute("""
             UPDATE agendamentos
-            SET data_entrada = ?, data_saida = ?, cpf = ?, quarto_id = ?
+            SET data_entrada = ?, data_saida = ?, cliente_cpf = ?, numero_quarto = ?
             WHERE id = ?
         """, (data_entrada, data_saida, cpf, numero_quarto, id_agendamento))
         self.conn.commit()

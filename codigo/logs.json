@@ -5,5 +5,75 @@
         "acao": "Falha ao carregar a imagem {erro}",
         "tela": "Login.py",
         "tipo": "WARN"
+    },
+    {
+        "data": "2025-06-04 14:45:04",
+        "usuario": "Sistema",
+        "acao": "Falha ao carregar a imagem [Errno 2] No such file or directory: 'codigo/LogoPousadaMare.png'",
+        "tela": "Login.py",
+        "tipo": "WARN"
+    },
+    {
+        "data": "2025-06-04 14:46:15",
+        "usuario": "Sistema",
+        "acao": "login bem sucedido",
+        "tela": "Login.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-04 14:50:34",
+        "usuario": "Sistema",
+        "acao": "Usuário administrador criado automaticamente",
+        "tela": "Login.py",
+        "tipo": "AUDIT"
+    },
+    {
+        "data": "2025-06-04 14:50:41",
+        "usuario": "Sistema",
+        "acao": "Falha ao realizar login",
+        "tela": "Login.py",
+        "tipo": "ERROR"
+    },
+    {
+        "data": "2025-06-04 14:50:48",
+        "usuario": "Sistema",
+        "acao": "login bem sucedido",
+        "tela": "Login.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-04 14:59:40",
+        "usuario": "Sistema",
+        "acao": "login bem sucedido",
+        "tela": "Login.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-04 15:13:23",
+        "usuario": "Sistema",
+        "acao": "login bem sucedido",
+        "tela": "Login.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-04 15:32:17",
+        "usuario": "Sistema",
+        "acao": "Usuário administrador criado automaticamente",
+        "tela": "Login.py",
+        "tipo": "AUDIT"
+    },
+    {
+        "data": "2025-06-04 15:32:26",
+        "usuario": "Sistema",
+        "acao": "Falha ao realizar login",
+        "tela": "Login.py",
+        "tipo": "ERROR"
+    },
+    {
+        "data": "2025-06-04 15:32:34",
+        "usuario": "Sistema",
+        "acao": "login bem sucedido",
+        "tela": "Login.py",
+        "tipo": "INFO"
     }
 ]

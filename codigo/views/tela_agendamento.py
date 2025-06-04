@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
-from views.form_agendamento import Forms_Agendamento
+from views.form_agendamento import FormsAgendamento
 from controllers.control_agendamento import Control_Agendamento
 from controllers.control_quarto import Control_Quarto
 
@@ -22,7 +22,6 @@ class TelaAgendamento:
         self.carregar_dados()
 
     def criar_interface(self):
-        # Topo
         topo = tk.Frame(self.root, bg='#3A7765', height=60)
         topo.pack(side=tk.TOP, fill=tk.X)
 
@@ -30,7 +29,6 @@ class TelaAgendamento:
                           font=("Helvetica", 18, "bold"))
         titulo.pack(pady=10)
 
-        # Campo de pesquisa
         frame_pesquisa = tk.Frame(self.root, bg='#FCEBD5')
         frame_pesquisa.pack(pady=10)
 
@@ -39,7 +37,6 @@ class TelaAgendamento:
         self.entrada_pesquisa.pack(side=tk.LEFT, padx=5)
         tk.Button(frame_pesquisa, text="Buscar", command=self.buscar_agendamento).pack(side=tk.LEFT)
 
-        # Tabela (com id oculto)
         colunas = ("nome", "email", "data_entrada", "data_saida", "quarto_id", "tipo", "preco")
         self.tabela = ttk.Treeview(self.root, columns=colunas, show="headings", height=15)
 
@@ -59,7 +56,6 @@ class TelaAgendamento:
 
         self.tabela.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
 
-        # Botões
         frame_botoes = tk.Frame(self.root, bg='#FCEBD5')
         frame_botoes.pack(pady=10)
 
@@ -87,7 +83,7 @@ class TelaAgendamento:
         self.atualizar_tabela(filtrados)
 
     def criar_agendamento(self):
-        Forms_Agendamento(self.root, self.conn, self.carregar_dados)
+        FormsAgendamento(self.root, self.conn, self.carregar_dados)
 
     def editar_agendamento(self):
         item = self.tabela.selection()
@@ -100,11 +96,17 @@ class TelaAgendamento:
                             ag['nome'] == valores[0] and ag['email'] == valores[1]), None)
 
         if agendamento:
-            Forms_Agendamento(self.root, self.conn, self.carregar_dados, dados=(
-                agendamento['id'], agendamento['nome'], agendamento['data_entrada'],
-                agendamento['data_saida'], agendamento['cpf'], agendamento['email'],
-                agendamento['quarto_id']
-            ))
+            FormsAgendamento(
+                self.root,
+                self.conn,
+                (
+                    agendamento['id'],
+                    agendamento['data_entrada'],
+                    agendamento['data_saida'],
+                    agendamento['cliente_cpf'],
+                    agendamento['quarto_id']
+                )
+            )
 
     def deletar_agendamento(self):
         item = self.tabela.selection()
