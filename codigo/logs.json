@@ -194,5 +194,75 @@
         "acao": "login bem sucedido",
         "tela": "Login.py",
         "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-05 12:25:47",
+        "usuario": "Sistema",
+        "acao": "login bem sucedido",
+        "tela": "Login.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-05 12:29:43",
+        "usuario": "Sistema",
+        "acao": "login bem sucedido",
+        "tela": "Login.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-05 12:32:01",
+        "usuario": "Sistema",
+        "acao": "Usuário administrador criado automaticamente",
+        "tela": "Login.py",
+        "tipo": "AUDIT"
+    },
+    {
+        "data": "2025-06-05 12:32:07",
+        "usuario": "Sistema",
+        "acao": "login bem sucedido",
+        "tela": "Login.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-05 12:35:56",
+        "usuario": "Sistema",
+        "acao": "Usuário administrador criado automaticamente",
+        "tela": "Login.py",
+        "tipo": "AUDIT"
+    },
+    {
+        "data": "2025-06-05 12:36:01",
+        "usuario": "Sistema",
+        "acao": "login bem sucedido",
+        "tela": "Login.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-05 12:40:34",
+        "usuario": "Sistema",
+        "acao": "login bem sucedido",
+        "tela": "Login.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-05 12:53:46",
+        "usuario": "Sistema",
+        "acao": "Usuário administrador criado automaticamente",
+        "tela": "Login.py",
+        "tipo": "AUDIT"
+    },
+    {
+        "data": "2025-06-05 12:57:09",
+        "usuario": "Sistema",
+        "acao": "login bem sucedido",
+        "tela": "Login.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-05 13:02:13",
+        "usuario": "Sistema",
+        "acao": "login bem sucedido",
+        "tela": "Login.py",
+        "tipo": "INFO"
     }
 ]

@@ -39,24 +39,21 @@ class Control_Agendamento:
         self.conn.commit()
 
     def listar_agendamentos(self):
-        self.conn.row_factory = sqlite3.Row  # Configura primeiro
-        cursor = self.conn.cursor()          # Só depois cria o cursor
-        query = '''
-            SELECT 
-                ag.id,
-                ag.data_entrada,
-                ag.data_saida,
-                cl.nome AS cliente_nome,
-                qt.numero_quarto,
-                tp.nome AS tipo_quarto
-            FROM agendamentos ag
-            JOIN clientes cl ON ag.cliente_cpf = cl.cpf
-            JOIN quartos qt ON ag.numero_quarto = qt.numero_quarto
-            JOIN tipos tp ON qt.tipo_id = tp.id
-        '''
-        cursor.execute(query)
-        resultado = cursor.fetchall()
-        return resultado
+        cursor = self.conn.cursor()
+        cursor.execute("""
+            SELECT a.id,c.nome AS cliente_nome, c.cpf AS cliente_cpf, c.email AS cliente_email, 
+            a.data_entrada, a.data_saida, a.numero_quarto, t.nome AS tipo_quarto, t.preco AS preco_quarto
+            FROM agendamentos a JOIN clientes c ON a.cliente_cpf = c.cpf JOIN quartos q ON a.numero_quarto = q.numero_quarto
+            JOIN tipos t ON q.tipo_id = t.id
+        """)
+
+        resultados = cursor.fetchall()
+
+        # Nome das colunas em ordem
+        colunas = ["id", "nome", "cpf_cliente", "email", "data_entrada", "data_saida", "quarto_id", "tipo", "preco"]
+
+        # Transforma em lista de dicionários
+        return [dict(zip(colunas, linha)) for linha in resultados]
 
     def carregar_dados(self) -> List[Dict]:
         """Carrega dados formatados para a interface"""

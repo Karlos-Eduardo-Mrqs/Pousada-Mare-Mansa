@@ -96,6 +96,11 @@ class FormsAgendamento:
             return
 
         try:
+            # Verifica se o cliente já existe; se não, adiciona-o
+            cliente_existente = self.ctr_cliente.buscar_cliente_por_cpf(cpf)
+            if not cliente_existente:
+                self.ctr_cliente.adicionar_cliente(cpf, nome, email)
+
             if self.dados_iniciais:
                 id_agendamento = self.dados_iniciais[0]
                 self.ctr_agendamento.atualizar_agendamento(
