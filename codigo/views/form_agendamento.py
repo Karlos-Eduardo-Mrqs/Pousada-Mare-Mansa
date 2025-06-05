@@ -23,7 +23,7 @@ class FormsAgendamento:
         self.janela = tk.Toplevel(self.parent)
         self.janela.title("Agendamento")
         self.janela.geometry("350x300")
-        self.janela.configure(bg="#FCEBD5")
+        self.janela.configure(bg="#FFFFFF")
         self.janela.grab_set()
 
         self._criar_widgets()
@@ -62,12 +62,24 @@ class FormsAgendamento:
         tk.Button(self.janela, text="Cancelar", command=self.janela.destroy).grid(row=6, column=1, padx=5, pady=10, sticky="w")
 
     def _preencher_dados(self):
-        id_ag, nome, entrada, saida, cpf, email, numero_quarto = self.dados_iniciais # type: ignore
+        id_ag, nome, entrada, saida, cpf, email, numero_quarto = self.dados_iniciais  # type: ignore
         self.entry_cpf.insert(0, cpf)
         self.entry_nome.insert(0, nome)
         self.entry_email.insert(0, email)
-        self.entry_check_in.set_date(datetime.strptime(entrada, "%d/%m/%Y"))
-        self.entry_check_out.set_date(datetime.strptime(saida, "%d/%m/%Y"))
+        
+        # Aqui o ajuste:
+        try:
+            data_entrada = datetime.strptime(entrada, "%d/%m/%Y")
+        except ValueError:
+            data_entrada = datetime.strptime(entrada, "%Y-%m-%d")
+        self.entry_check_in.set_date(data_entrada)
+        
+        try:
+            data_saida = datetime.strptime(saida, "%d/%m/%Y")
+        except ValueError:
+            data_saida = datetime.strptime(saida, "%Y-%m-%d")
+        self.entry_check_out.set_date(data_saida)
+        
         self.entry_quarto.set(str(numero_quarto))
 
     def _buscar_cliente(self, event=None):

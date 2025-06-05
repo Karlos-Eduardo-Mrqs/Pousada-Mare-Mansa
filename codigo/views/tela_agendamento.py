@@ -1,8 +1,11 @@
 import tkinter as tk
+import datetime
 from tkinter import ttk, messagebox
 from views.form_agendamento import FormsAgendamento
 from controllers.control_agendamento import Control_Agendamento
 from controllers.control_quarto import Control_Quarto
+from controllers.control_cliente import Control_Cliente
+from models.logs_json import LoggerJSON
 
 class TelaAgendamento:
     def __init__(self, root, app, conn):
@@ -10,12 +13,14 @@ class TelaAgendamento:
         self.app = app
         self.conn = conn
 
+        self.logger = LoggerJSON()
         self.ctr_agendamento = Control_Agendamento(self.conn)
         self.ctr_quarto = Control_Quarto(self.conn)
+        self.ctr_cliente = Control_Cliente(self.conn)
 
         self.root.title("Agendamentos - Pousada Maré Mansa")
         self.root.geometry("900x500")
-        self.root.configure(bg='#FCEBD5')
+        self.root.configure(bg='#FFFFFF')
 
         self.dados = []
         self.criar_interface()
@@ -43,15 +48,9 @@ class TelaAgendamento:
         self.tabela = ttk.Treeview(self.root, columns=colunas, show="headings", height=15)
 
         nomes_colunas = {
-            "id": "ID",
-            "nome": "Nome",
-            "cpf_cliente": "CPF",
-            "email": "Email",
-            "data_entrada": "Entrada",
-            "data_saida": "Saída",
-            "quarto_id": "Quarto",
-            "tipo": "Tipo",
-            "preco": "Preço (R$)"
+            "id": "ID","nome": "Nome","cpf_cliente": "CPF","email": "Email",
+            "data_entrada": "Entrada","data_saida": "Saída",
+            "quarto_id": "Quarto","tipo": "Tipo","preco": "Preço (R$)"
         }
 
         for col in colunas:
@@ -78,13 +77,24 @@ class TelaAgendamento:
         for i in self.tabela.get_children():
             self.tabela.delete(i)
         for ag in dados:
+            # Formatando as datas
+            try:
+                data_entrada_fmt = datetime.datetime.strptime(ag['data_entrada'][:10], "%Y-%m-%d").strftime("%d-%m-%Y")
+            except Exception:
+                data_entrada_fmt = ag['data_entrada']
+
+            try:
+                data_saida_fmt = datetime.datetime.strptime(ag['data_saida'][:10], "%Y-%m-%d").strftime("%d-%m-%Y")
+            except Exception:
+                data_saida_fmt = ag['data_saida']
+
             self.tabela.insert('', tk.END, values=(
                 ag['id'],
                 ag['nome'],
                 ag.get('cpf_cliente', ''),
                 ag['email'],
-                ag['data_entrada'],
-                ag['data_saida'],
+                data_entrada_fmt,
+                data_saida_fmt,
                 ag['quarto_id'],
                 ag.get('tipo', ''),
                 f"{ag.get('preco', 0.0):.2f}"
@@ -104,7 +114,9 @@ class TelaAgendamento:
         item = self.tabela.selection()
         if not item:
             messagebox.showwarning("Aviso", "Selecione um agendamento para editar.")
+            self.logger.registrar("Sistema", "Erro ao editar um agendamento inexistente", "tela_agendamento.py", "WARN")
             return
+        
         item_id = item[0]
         item_index = self.tabela.index(item_id)
         dados_agendamento = self.dados[item_index]
@@ -127,20 +139,29 @@ class TelaAgendamento:
         item = self.tabela.selection()
         if not item:
             messagebox.showwarning("Aviso", "Selecione um agendamento para deletar.")
+            self.logger.registrar("Sistema", "Erro ao excluir um agendamento inexistente", "tela_agendamento.py", "WARN")
             return
+        
         item_id = item[0]
         item_index = self.tabela.index(item_id)
-        agendamento_id = self.dados[item_index]['id']
+        agendamento = self.dados[item_index]
+        agendamento_id = agendamento['id']
+        cliente_cpf = agendamento.get('cpf_cliente')  # ou outro campo identificador do cliente
 
-        confirm = messagebox.askyesno("Confirmação", "Tem certeza que deseja deletar este agendamento?")
+        confirm = messagebox.askyesno("Confirmação", "Tem certeza que deseja deletar este agendamento e o cliente associado?")
         if confirm:
             try:
                 self.ctr_agendamento.remover_agendamento(agendamento_id)
-                messagebox.showinfo("Sucesso", "Agendamento deletado com sucesso!")
+
+                # Excluir cliente relacionado (se existir cpf_cliente)
+                if cliente_cpf:
+                    self.ctr_cliente.remover_cliente(cliente_cpf)
+
+                messagebox.showinfo("Sucesso", "Agendamento e cliente deletados com sucesso!")
+                self.logger.registrar("Sistema", f"Agendamento e cliente foram excluídos com sucesso", "tela_agendamento.py", "INFO")
                 self.carregar_dados()
             except Exception as e:
                 messagebox.showerror("Erro", f"Erro ao deletar: {e}")
 
     def voltar_menu(self):
-        self.root.destroy()
-        self.app.exibir_tela_menu()
+        self.app.abrir_tela_menu()

@@ -6,17 +6,20 @@ from .control_quarto import Control_Quarto
 from .control_cliente import Control_Cliente
 from .control_agendamento import Control_Agendamento
 from .control_usuario import Control_Usuario
+from models.logs_json import LoggerJSON
 
 class Banco:
     def __init__(self, nome_banco='pousada.db'):
+        self.logger = LoggerJSON()
         self.conn = None
         self.nome_banco = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", nome_banco)
 
     def conectar(self):
         try:
             self.conn = sqlite3.connect(self.nome_banco)
-            print("✅ Conexão estabelecida com sucesso.")
+            self.logger.registrar("Sistema", "Conexão estabelecida com sucesso.", "banco.py", "INFO")
         except sqlite3.Error as erro:
+            self.logger.registrar("Sistema", "Erro ao conectar com o banco de dados", "banco.py", "ERROR")
             print(f"❌ Erro ao conectar ao banco: {erro}")
             raise
 
@@ -24,7 +27,7 @@ class Banco:
         if self.conn:
             self.conn.close()
             self.conn = None
-            print("🔌 Conexão encerrada.")
+            self.logger.registrar("Sistema", "Conexão encerrada.", "banco.py", "INFO")
 
     def criar_tabelas(self):
         if self.conn:
@@ -44,12 +47,10 @@ class Banco:
             self.control_agendamento.criar_tabela()
 
             if not self.control_tipo.listar_tipos():
-                print("Inserindo tipos de quartos iniciais...")
+                self.logger.registrar("Sistema", "Inserindo tipos de quartos iniciais..", "banco.py", "INFO")
                 self.control_tipo.adicionar_tipo(1, "Quarto Solteiro", 100.00)
                 self.control_tipo.adicionar_tipo(2, "Quarto Casal", 150.00)
                 self.control_tipo.adicionar_tipo(3, "Suíte", 250.00)
-                self.control_tipo.adicionar_tipo(4, "Suíte Luxo", 400.00)
-                self.control_tipo.adicionar_tipo(5, "Apartamento Familiar", 350.00)
 
             if not self.control_quarto.listar_quartos():
                 self.control_quarto.adicionar_quarto(101, True, 2, 1)
@@ -58,6 +59,6 @@ class Banco:
                 self.control_quarto.adicionar_quarto(202, True, 4, 2)
                 self.control_quarto.adicionar_quarto(301, True, 6, 3)
                 self.control_quarto.adicionar_quarto(302, True, 6, 3)
-                print("Dados iniciais de quartos inseridos.")
+                self.logger.registrar("Sistema", "Dados iniciais de quartos inseridos.", "banco.py", "INFO")
         else:
-            print("⚠️ Conexão não estabelecida.")
+            self.logger.registrar("Sistema", "Conexão não estabelecida.", "banco.py", "INFO")

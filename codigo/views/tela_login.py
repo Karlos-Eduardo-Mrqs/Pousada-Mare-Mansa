@@ -12,8 +12,8 @@ class TelaLogin:
         self.logger = LoggerJSON()
         self.controller_usuario = Control_Usuario(self.conn)  # Passado pelo main
         self.root.title("Tela de Login - Pousada Maré Mansa")
-        self.root.geometry("700x500")
-        self.root.configure(bg="#FAF1E4")
+        self.root.geometry("800x600")
+        self.root.configure(bg="#FFFFFF")
 
         self.garantir_admin()
         self.construir_interface()

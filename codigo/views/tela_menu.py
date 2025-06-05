@@ -6,21 +6,21 @@ class TelaMenu:
         self.app = app
         self.root.title("Menu Principal - Pousada Maré Mansa")
         self.root.geometry("600x400")
-        self.root.configure(bg="#FCEBD5")
+        self.root.configure(bg="#FFFFFF")
 
         # Cabeçalho
-        topo = tk.Frame(self.root, bg="#3A7765", height=60)
+        topo = tk.Frame(self.root, bg="#397A7B", height=60)
         topo.pack(fill=tk.X)
-        tk.Label(topo, text="Menu Principal", font=("Helvetica", 20, "bold"), bg="#3A7765", fg="white").pack(pady=15)
+        tk.Label(topo, text="Menu Principal", font=("Helvetica", 20, "bold"), bg="#397A7B", fg="white").pack(pady=15)
 
         # Corpo
-        corpo = tk.Frame(self.root, bg="#FCEBD5")
+        corpo = tk.Frame(self.root, bg="#FAF1E4")
         corpo.pack(expand=True)
 
         estilo_botao = {
             "font": ("Helvetica", 14),
             "width": 25,
-            "bg": "#3A7765",
+            "bg": "#397A7B",
             "fg": "white",
             "activebackground": "#2E5F50",
             "activeforeground": "white",
@@ -36,6 +36,6 @@ class TelaMenu:
         tk.Button(corpo, text="❌ Sair", command=self.app.sair, **estilo_botao).pack(pady=10)
         
         # Rodapé
-        rodape = tk.Frame(self.root, bg="#3A7765", height=40)
+        rodape = tk.Frame(self.root, bg="#397A7B", height=40)
         rodape.pack(fill=tk.X, side=tk.BOTTOM)
-        tk.Label(rodape, text="Pousada Maré Mansa © 2025", bg="#3A7765", fg="white", font=("Helvetica", 10)).pack(pady=10)
+        tk.Label(rodape, text="Pousada Maré Mansa © 2025", bg="#397A7B", fg="white", font=("Helvetica", 10)).pack(pady=10)

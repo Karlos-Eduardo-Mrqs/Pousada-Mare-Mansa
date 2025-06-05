@@ -49,7 +49,7 @@ class TelasPousada:
 
     def voltar_menu(self):
         """Retorna ao menu principal com leve atraso para evitar conflitos de evento."""
-        self.root.after(100, self.abrir_tela_menu)
+        self.root.after(100, self.abrir_tela_menu)  # sem parênteses
 
     def sair(self):
         """Desconecta do banco e fecha a aplicação."""
