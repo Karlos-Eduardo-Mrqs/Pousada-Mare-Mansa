@@ -14,7 +14,7 @@ class TelaAgendamento:
         self.ctr_quarto = Control_Quarto(self.conn)
 
         self.root.title("Agendamentos - Pousada Maré Mansa")
-        self.root.geometry("800x500")
+        self.root.geometry("900x500")
         self.root.configure(bg='#FCEBD5')
 
         self.dados = []
@@ -22,13 +22,14 @@ class TelaAgendamento:
         self.carregar_dados()
 
     def criar_interface(self):
+        # Topo com título
         topo = tk.Frame(self.root, bg='#3A7765', height=60)
         topo.pack(side=tk.TOP, fill=tk.X)
-
         titulo = tk.Label(topo, text="Agendamentos", bg='#3A7765', fg='white',
                           font=("Helvetica", 18, "bold"))
         titulo.pack(pady=10)
 
+        # Área de pesquisa
         frame_pesquisa = tk.Frame(self.root, bg='#FCEBD5')
         frame_pesquisa.pack(pady=10)
 
@@ -37,14 +38,17 @@ class TelaAgendamento:
         self.entrada_pesquisa.pack(side=tk.LEFT, padx=5)
         tk.Button(frame_pesquisa, text="Buscar", command=self.buscar_agendamento).pack(side=tk.LEFT)
 
-        colunas = ("nome", "email", "data_entrada", "data_saida", "quarto_id", "tipo", "preco")
+        # Tabela de agendamentos
+        colunas = ("id", "nome", "cpf_cliente", "email", "data_entrada", "data_saida", "quarto_id", "tipo", "preco")
         self.tabela = ttk.Treeview(self.root, columns=colunas, show="headings", height=15)
 
         nomes_colunas = {
+            "id": "ID",
             "nome": "Nome",
+            "cpf_cliente": "CPF",
             "email": "Email",
-            "data_entrada": "Data de Entrada",
-            "data_saida": "Data de Saída",
+            "data_entrada": "Entrada",
+            "data_saida": "Saída",
             "quarto_id": "Quarto",
             "tipo": "Tipo",
             "preco": "Preço (R$)"
@@ -52,16 +56,18 @@ class TelaAgendamento:
 
         for col in colunas:
             self.tabela.heading(col, text=nomes_colunas[col])
-            self.tabela.column(col, anchor=tk.CENTER)
+            self.tabela.column(col, anchor=tk.CENTER, width=100)
 
         self.tabela.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
 
+        # Botões de ação
         frame_botoes = tk.Frame(self.root, bg='#FCEBD5')
         frame_botoes.pack(pady=10)
 
         tk.Button(frame_botoes, text="Criar", command=self.criar_agendamento).pack(side=tk.LEFT, padx=10)
         tk.Button(frame_botoes, text="Editar", command=self.editar_agendamento).pack(side=tk.LEFT, padx=10)
         tk.Button(frame_botoes, text="Deletar", command=self.deletar_agendamento).pack(side=tk.LEFT, padx=10)
+        tk.Button(frame_botoes, text="Atualizar", command=self.carregar_dados).pack(side=tk.LEFT, padx=10)
         tk.Button(frame_botoes, text="Voltar ao Menu", bg="#D9B08C", command=self.voltar_menu).pack(side=tk.LEFT, padx=10)
 
     def carregar_dados(self):
@@ -73,8 +79,15 @@ class TelaAgendamento:
             self.tabela.delete(i)
         for ag in dados:
             self.tabela.insert('', tk.END, values=(
-                ag['nome'], ag['email'], ag['data_entrada'], ag['data_saida'],
-                ag['quarto_id'], ag['tipo'], f"{ag['preco']:.2f}"
+                ag['id'],
+                ag['nome'],
+                ag.get('cpf_cliente', ''),
+                ag['email'],
+                ag['data_entrada'],
+                ag['data_saida'],
+                ag['quarto_id'],
+                ag.get('tipo', ''),
+                f"{ag.get('preco', 0.0):.2f}"
             ))
 
     def buscar_agendamento(self):
@@ -83,49 +96,51 @@ class TelaAgendamento:
         self.atualizar_tabela(filtrados)
 
     def criar_agendamento(self):
-        FormsAgendamento(self.root, self.conn)
-        self.root.wait_window()  # Espera o formulário fechar
-        self.carregar_dados()
+        def ao_salvar():
+            self.carregar_dados()
+        FormsAgendamento(self.root, self.conn, callback_sucesso=ao_salvar)
 
     def editar_agendamento(self):
         item = self.tabela.selection()
         if not item:
-            messagebox.showwarning("Atenção", "Selecione um agendamento para editar.")
+            messagebox.showwarning("Aviso", "Selecione um agendamento para editar.")
             return
-        valores = self.tabela.item(item[0])["values"]
+        item_id = item[0]
+        item_index = self.tabela.index(item_id)
+        dados_agendamento = self.dados[item_index]
 
-        agendamento = next((ag for ag in self.dados if
-                            ag['nome'] == valores[0] and ag['email'] == valores[1]), None)
+        dados_form = (
+            dados_agendamento['id'],
+            dados_agendamento['nome'],
+            dados_agendamento['data_entrada'],
+            dados_agendamento['data_saida'],
+            dados_agendamento['cpf_cliente'],
+            dados_agendamento['email'],
+            dados_agendamento['quarto_id']
+        )
 
-        if agendamento:
-            FormsAgendamento(
-                self.root,
-                self.conn,
-                (
-                    agendamento['id'],
-                    agendamento['data_entrada'],
-                    agendamento['data_saida'],
-                    agendamento['cliente_cpf'],
-                    agendamento['quarto_id']
-                )
-            )
-            self.root.wait_window()
+        def ao_salvar():
             self.carregar_dados()
+        FormsAgendamento(self.root, self.conn, dados_iniciais=dados_form, callback_sucesso=ao_salvar)
 
     def deletar_agendamento(self):
         item = self.tabela.selection()
         if not item:
-            messagebox.showwarning("Atenção", "Selecione um agendamento para deletar.")
+            messagebox.showwarning("Aviso", "Selecione um agendamento para deletar.")
             return
-        valores = self.tabela.item(item[0])["values"]
-        agendamento = next((ag for ag in self.dados if
-                            ag['nome'] == valores[0] and ag['email'] == valores[1]), None)
-        if agendamento:
-            confirm = messagebox.askyesno("Confirmação", "Tem certeza que deseja deletar este agendamento?")
-            if confirm:
-                self.ctr_agendamento.remover_agendamento(agendamento['id'])
+        item_id = item[0]
+        item_index = self.tabela.index(item_id)
+        agendamento_id = self.dados[item_index]['id']
+
+        confirm = messagebox.askyesno("Confirmação", "Tem certeza que deseja deletar este agendamento?")
+        if confirm:
+            try:
+                self.ctr_agendamento.remover_agendamento(agendamento_id)
+                messagebox.showinfo("Sucesso", "Agendamento deletado com sucesso!")
                 self.carregar_dados()
+            except Exception as e:
+                messagebox.showerror("Erro", f"Erro ao deletar: {e}")
 
     def voltar_menu(self):
         self.root.destroy()
-        self.app.mostrar_menu_principal()
+        self.app.exibir_tela_menu()

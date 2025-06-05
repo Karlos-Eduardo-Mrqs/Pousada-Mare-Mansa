@@ -1,5 +1,6 @@
 from datetime import date
 from typing import List, Dict
+import sqlite3
 
 class Control_Agendamento:
     def __init__(self, conn):
@@ -38,7 +39,8 @@ class Control_Agendamento:
         self.conn.commit()
 
     def listar_agendamentos(self):
-        cursor = self.conn.cursor()
+        self.conn.row_factory = sqlite3.Row  # Configura primeiro
+        cursor = self.conn.cursor()          # Só depois cria o cursor
         query = '''
             SELECT 
                 ag.id,

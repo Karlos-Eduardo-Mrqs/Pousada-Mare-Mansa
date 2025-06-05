@@ -9,10 +9,11 @@ from controllers.control_quarto import Control_Quarto
 from controllers.control_agendamento import Control_Agendamento
 
 class FormsAgendamento:
-    def __init__(self, parent, conn, dados_iniciais=None):
+    def __init__(self, parent, conn, dados_iniciais=None, callback_sucesso=None):
         self.parent = parent
         self.conn = conn
         self.dados_iniciais = dados_iniciais
+        self.callback_sucesso = callback_sucesso
 
         self.ctr_cliente = Control_Cliente(self.conn)
         self.ctr_quarto = Control_Quarto(self.conn)
@@ -30,52 +31,44 @@ class FormsAgendamento:
             self._preencher_dados()
 
     def _criar_widgets(self):
-        # CPF
         tk.Label(self.janela, text="CPF:", bg="#FCEBD5").grid(row=0, column=0, padx=5, pady=5, sticky="e")
         self.entry_cpf = tk.Entry(self.janela)
         self.entry_cpf.grid(row=0, column=1, padx=5, pady=5)
         self.entry_cpf.bind("<FocusOut>", self._buscar_cliente)
 
-        # Nome
         tk.Label(self.janela, text="Nome:", bg="#FCEBD5").grid(row=1, column=0, padx=5, pady=5, sticky="e")
         self.entry_nome = tk.Entry(self.janela)
         self.entry_nome.grid(row=1, column=1, padx=5, pady=5)
 
-        # Email
         tk.Label(self.janela, text="E-mail:", bg="#FCEBD5").grid(row=2, column=0, padx=5, pady=5, sticky="e")
         self.entry_email = tk.Entry(self.janela)
         self.entry_email.grid(row=2, column=1, padx=5, pady=5)
 
-        # Data entrada
-        tk.Label(self.janela, text="Data entrada:", bg="#FCEBD5").grid(row=3, column=0, padx=5, pady=5, sticky="e")
+        tk.Label(self.janela, text="Entrada:", bg="#FCEBD5").grid(row=3, column=0, padx=5, pady=5, sticky="e")
         self.entry_check_in = DateEntry(self.janela, date_pattern="dd/mm/yyyy")
         self.entry_check_in.grid(row=3, column=1, padx=5, pady=5)
 
-        # Data saída
-        tk.Label(self.janela, text="Data saída:", bg="#FCEBD5").grid(row=4, column=0, padx=5, pady=5, sticky="e")
+        tk.Label(self.janela, text="Saída:", bg="#FCEBD5").grid(row=4, column=0, padx=5, pady=5, sticky="e")
         self.entry_check_out = DateEntry(self.janela, date_pattern="dd/mm/yyyy")
         self.entry_check_out.grid(row=4, column=1, padx=5, pady=5)
 
-        # Quarto
         tk.Label(self.janela, text="Quarto:", bg="#FCEBD5").grid(row=5, column=0, padx=5, pady=5, sticky="e")
-        quartos = self.ctr_quarto.listar_quartos()
+        quartos = self.ctr_quarto.listar_quartos() or []
         quartos_disponiveis = [str(q["numero"]) for q in quartos if q.get("disponibilidade", True)]
         self.entry_quarto = ttk.Combobox(self.janela, values=quartos_disponiveis, state="readonly")
         self.entry_quarto.grid(row=5, column=1, padx=5, pady=5)
 
-        # Botões
-        tk.Button(self.janela, text="Salvar", command=self._salvar).grid(row=6, column=0, padx=5, pady=15, sticky="e")
-        tk.Button(self.janela, text="Cancelar", command=self.janela.destroy).grid(row=6, column=1, padx=5, pady=15, sticky="w")
+        tk.Button(self.janela, text="Salvar", command=self._salvar).grid(row=6, column=0, padx=5, pady=10, sticky="e")
+        tk.Button(self.janela, text="Cancelar", command=self.janela.destroy).grid(row=6, column=1, padx=5, pady=10, sticky="w")
 
     def _preencher_dados(self):
-        id_ag, nome, entrada, saida, cpf, email, numero_quarto = self.dados_iniciais
+        id_ag, nome, entrada, saida, cpf, email, numero_quarto = self.dados_iniciais # type: ignore
         self.entry_cpf.insert(0, cpf)
         self.entry_nome.insert(0, nome)
         self.entry_email.insert(0, email)
         self.entry_check_in.set_date(datetime.strptime(entrada, "%d/%m/%Y"))
         self.entry_check_out.set_date(datetime.strptime(saida, "%d/%m/%Y"))
         self.entry_quarto.set(str(numero_quarto))
-
 
     def _buscar_cliente(self, event=None):
         cpf = self.entry_cpf.get().strip()
@@ -95,11 +88,9 @@ class FormsAgendamento:
         email = self.entry_email.get().strip()
         numero_quarto = self.entry_quarto.get().strip()
 
-        # Converte datas de string para datetime.date
         data_entrada = datetime.strptime(self.entry_check_in.get(), "%d/%m/%Y").date()
         data_saida = datetime.strptime(self.entry_check_out.get(), "%d/%m/%Y").date()
 
-        # Validações básicas
         if not (cpf and nome and email and numero_quarto):
             messagebox.showerror("Erro", "Todos os campos devem ser preenchidos.")
             return
@@ -116,6 +107,10 @@ class FormsAgendamento:
                     data_entrada, data_saida, cpf, int(numero_quarto)
                 )
                 messagebox.showinfo("Sucesso", "Agendamento cadastrado com sucesso!")
+
+            if self.callback_sucesso:
+                self.callback_sucesso()
             self.janela.destroy()
+
         except Exception as e:
             messagebox.showerror("Erro", str(e))

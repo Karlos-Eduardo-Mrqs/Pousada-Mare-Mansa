@@ -11,17 +11,21 @@ class TelasPousada:
         self.root.geometry("500x400")
         self.root.title("Pousada Maré Mansa")
 
+        # Inicializa e conecta ao banco
         self.banco = Banco()
         self.banco.conectar()
         self.banco.criar_tabelas()
 
+        # Controladores disponíveis
         self.agendamento_controller = self.banco.control_agendamento
         self.cliente_controller = self.banco.control_cliente
         self.quarto_controller = self.banco.control_quarto
 
+        # Tela inicial
         self.abrir_tela_login()
 
     def limpar_tela(self):
+        """Remove todos os widgets da tela atual."""
         if not self.root.winfo_exists():
             return
         for widget in self.root.winfo_children():
@@ -44,9 +48,11 @@ class TelasPousada:
         TelaLogs(self)
 
     def voltar_menu(self):
+        """Retorna ao menu principal com leve atraso para evitar conflitos de evento."""
         self.root.after(100, self.abrir_tela_menu)
 
     def sair(self):
+        """Desconecta do banco e fecha a aplicação."""
         self.banco.desconectar()
         self.root.destroy()
 

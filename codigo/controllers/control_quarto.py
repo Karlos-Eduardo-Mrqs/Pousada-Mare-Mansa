@@ -34,7 +34,9 @@ class Control_Quarto:
         cursor = self.conn.cursor()
         cursor.execute("SELECT numero_quarto, disponibilidade, capacidade, tipo_id FROM quartos")
         resultado = cursor.fetchall()
-        return [{"numero": row[0], "disponibilidade": row[1], "capacidade": row[2], "tipo_id": row[3]} for row in resultado]
+        quartos = [{"numero": row[0], "disponibilidade": row[1], "capacidade": row[2], "tipo_id": row[3]} for row in resultado]
+        quartos_disponiveis = [q for q in quartos if q["disponibilidade"] == 1]
+        return quartos_disponiveis
 
     def atualizar_status_quarto(self, disponivel: bool, numero_quarto: int):
         cursor = self.conn.cursor()
