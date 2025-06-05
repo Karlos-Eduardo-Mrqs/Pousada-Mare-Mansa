@@ -28,9 +28,9 @@ class TelaAgendamento:
 
     def criar_interface(self):
         # Topo com título
-        topo = tk.Frame(self.root, bg='#3A7765', height=60)
+        topo = tk.Frame(self.root, bg='#397A7B', height=60)
         topo.pack(side=tk.TOP, fill=tk.X)
-        titulo = tk.Label(topo, text="Agendamentos", bg='#3A7765', fg='white', font=("Helvetica", 18, "bold"))
+        titulo = tk.Label(topo, text="Agendamentos", bg='#397A7B', fg='white', font=("Helvetica", 18, "bold"))
         titulo.pack(pady=10)
 
         # Área de pesquisa
@@ -115,7 +115,7 @@ class TelaAgendamento:
             messagebox.showwarning("Aviso", "Selecione um agendamento para editar.")
             self.logger.registrar("Sistema", "Erro ao editar um agendamento inexistente", "tela_agendamento.py", "WARN")
             return
-        
+
         item_id = item[0]
         item_index = self.tabela.index(item_id)
         dados_agendamento = self.dados[item_index]
@@ -130,34 +130,49 @@ class TelaAgendamento:
             dados_agendamento['quarto_id']
         )
 
+        id_quarto_antigo = dados_agendamento["quarto_id"]
+
         def ao_salvar():
             self.carregar_dados()
-        FormsAgendamento(self.root, self.conn, dados_iniciais=dados_form, callback_sucesso=ao_salvar)
 
+        FormsAgendamento(
+            self.root,
+            self.conn,
+            dados_iniciais=dados_form,
+            quarto_antigo=id_quarto_antigo,
+            callback_sucesso=ao_salvar
+        )
+
+        
     def deletar_agendamento(self):
         item = self.tabela.selection()
         if not item:
             messagebox.showwarning("Aviso", "Selecione um agendamento para deletar.")
             self.logger.registrar("Sistema", "Erro ao excluir um agendamento inexistente", "tela_agendamento.py", "WARN")
             return
-        
+
         item_id = item[0]
         item_index = self.tabela.index(item_id)
         agendamento = self.dados[item_index]
-        agendamento_id = agendamento['id']
-        cliente_cpf = agendamento.get('cpf_cliente')  # ou outro campo identificador do cliente
+        
+        id_quarto = agendamento.get('quarto_id')
+        id_agendamento = agendamento.get('id')
+
+        if id_agendamento is None:
+            messagebox.showerror("Erro", "ID do agendamento não encontrado.")
+            return
+        
+        if id_quarto is None:
+            messagebox.showerror("Erro", "ID do quarto não encontrado.")
+            return
 
         confirm = messagebox.askyesno("Confirmação", "Tem certeza que deseja deletar este agendamento e o cliente associado?")
         if confirm:
             try:
-                self.ctr_agendamento.remover_agendamento(agendamento_id)
-
-                # Excluir cliente relacionado (se existir cpf_cliente)
-                if cliente_cpf:
-                    self.ctr_cliente.remover_cliente(cliente_cpf)
-
-                messagebox.showinfo("Sucesso", "Agendamento e cliente deletados com sucesso!")
-                self.logger.registrar("Sistema", f"Agendamento e cliente foram excluídos com sucesso", "tela_agendamento.py", "INFO")
+                self.ctr_quarto.atualizar_status_quarto(True, int(id_quarto))
+                self.ctr_agendamento.remover_agendamento(id_agendamento)
+                messagebox.showinfo("Sucesso", "Agendamento deletado com sucesso!")
+                self.logger.registrar("Sistema", f"Agendamento (ID: {id_agendamento}) excluído com sucesso", "tela_agendamento.py", "INFO")
                 self.carregar_dados()
             except Exception as e:
                 messagebox.showerror("Erro", f"Erro ao deletar: {e}")

@@ -10,10 +10,11 @@ from controllers.control_agendamento import Control_Agendamento
 from models.logs_json import LoggerJSON
 
 class FormsAgendamento:
-    def __init__(self, parent, conn, dados_iniciais=None, callback_sucesso=None):
+    def __init__(self, parent, conn, dados_iniciais=None, quarto_antigo=None, callback_sucesso=None):
         self.parent = parent
         self.conn = conn
         self.dados_iniciais = dados_iniciais
+        self.quarto_antigo = quarto_antigo  # novo atributo
         self.callback_sucesso = callback_sucesso
         
         self.logger = LoggerJSON()
@@ -112,7 +113,6 @@ class FormsAgendamento:
             data_entrada = datetime.strptime(self.entry_check_in.get(), "%d/%m/%Y").date()
             data_saida = datetime.strptime(self.entry_check_out.get(), "%d/%m/%Y").date()
 
-            # Validação de datas
             if data_saida <= data_entrada:
                 messagebox.showerror("Erro", "A data de saída deve ser após a data de entrada.")
                 return
@@ -125,17 +125,16 @@ class FormsAgendamento:
                 messagebox.showerror("Erro", "A data de saída já passou!")
                 return
 
-            # Verifica disponibilidade do quarto
             quarto = self.ctr_quarto.buscar_quarto_por_numero(numero_quarto)
             if not quarto:
                 messagebox.showerror("Erro", "Quarto não encontrado.")
                 return
 
-            if not quarto['disponibilidade'] and not self.dados_iniciais:
+            # Se estiver cadastrando (sem dados iniciais), verifica disponibilidade
+            if not self.dados_iniciais and not quarto['disponibilidade']:
                 messagebox.showerror("Erro", "Quarto não está disponível.")
                 return
 
-            # Verifica se o cliente já existe; se não, adiciona-o
             cliente_existente = self.ctr_cliente.buscar_cliente_por_cpf(cpf)
             if not cliente_existente:
                 self.ctr_cliente.adicionar_cliente(cpf, nome, email)
@@ -145,13 +144,17 @@ class FormsAgendamento:
                 self.ctr_agendamento.atualizar_agendamento(
                     id_agendamento, data_entrada, data_saida, cpf, numero_quarto
                 )
-                messagebox.showinfo("Sucesso", "Agendamento atualizado com sucesso!")
+                # Atualiza status quartos se mudou o quarto
+                if self.quarto_antigo and self.quarto_antigo != numero_quarto:
+                    self.ctr_quarto.atualizar_status_quarto(True, self.quarto_antigo)  # libera antigo
+                    self.ctr_quarto.atualizar_status_quarto(False, numero_quarto)      # bloqueia novo
             else:
                 self.ctr_agendamento.adicionar_agendamento(
                     data_entrada, data_saida, cpf, numero_quarto
                 )
-                self.ctr_quarto.atualizar_status_quarto(False, numero_quarto)  # Marca como indisponível
-                messagebox.showinfo("Sucesso", "Agendamento cadastrado com sucesso!")
+                self.ctr_quarto.atualizar_status_quarto(False, numero_quarto)  # bloqueia quarto novo
+
+            messagebox.showinfo("Sucesso", "Agendamento salvo com sucesso!")
 
             if self.callback_sucesso:
                 self.callback_sucesso()

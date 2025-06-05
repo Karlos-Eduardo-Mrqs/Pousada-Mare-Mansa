@@ -53,12 +53,18 @@ class Banco:
                 self.control_tipo.adicionar_tipo(3, "Suíte", 250.00)
 
             if not self.control_quarto.listar_quartos():
-                self.control_quarto.adicionar_quarto(101, True, 2, 1)
-                self.control_quarto.adicionar_quarto(102, True, 2, 1)
-                self.control_quarto.adicionar_quarto(201, True, 4, 2)
-                self.control_quarto.adicionar_quarto(202, True, 4, 2)
-                self.control_quarto.adicionar_quarto(301, True, 6, 3)
-                self.control_quarto.adicionar_quarto(302, True, 6, 3)
-                self.logger.registrar("Sistema", "Dados iniciais de quartos inseridos.", "banco.py", "INFO")
+                # Andar 1 - quartos 101 a 106 (solteiro)
+                for numero in range(101, 107):
+                    self.control_quarto.adicionar_quarto(numero, True, 2, 1)
+
+                # Andar 2 - quartos 201 a 206 (casal)
+                for numero in range(201, 207):
+                    self.control_quarto.adicionar_quarto(numero, True, 4, 2)
+
+                # Andar 3 - quartos 301 a 306 (suíte)
+                for numero in range(301, 307):
+                    self.control_quarto.adicionar_quarto(numero, True, 6, 3)
+
+                    self.logger.registrar("Sistema", "Dados iniciais de quartos inseridos.", "banco.py", "INFO")
         else:
             self.logger.registrar("Sistema", "Conexão não estabelecida.", "banco.py", "INFO")

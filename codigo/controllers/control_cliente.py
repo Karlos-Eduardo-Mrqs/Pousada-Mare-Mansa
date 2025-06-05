@@ -26,7 +26,7 @@ class Control_Cliente:
     def remover_cliente(self, cpf: str):
         """Remove um cliente pelo CPF"""
         cursor = self.conn.cursor()
-        cursor.execute("DELETE FROM clientes WHERE cpf = ?", (cpf,))
+        cursor.execute("DELETE FROM clientes WHERE cpf = ? LIMIT 1", (cpf,))
         self.conn.commit()
 
     def listar_clientes(self):
