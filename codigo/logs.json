@@ -40,5 +40,138 @@
         "acao": "Conexão encerrada.",
         "tela": "banco.py",
         "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-05 15:10:37",
+        "usuario": "Sistema",
+        "acao": "Conexão estabelecida com sucesso.",
+        "tela": "banco.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-05 15:11:15",
+        "usuario": "Sistema",
+        "acao": "login bem sucedido",
+        "tela": "Login.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-05 15:21:23",
+        "usuario": "Sistema",
+        "acao": "Conexão estabelecida com sucesso.",
+        "tela": "banco.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-05 15:21:28",
+        "usuario": "Sistema",
+        "acao": "login bem sucedido",
+        "tela": "Login.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-05 15:21:45",
+        "usuario": "Sistema",
+        "acao": "Conexão estabelecida com sucesso.",
+        "tela": "banco.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-05 15:21:45",
+        "usuario": "Sistema",
+        "acao": "Inserindo tipos de quartos iniciais..",
+        "tela": "banco.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-05 15:21:45",
+        "usuario": "Sistema",
+        "acao": "Dados iniciais de quartos inseridos.",
+        "tela": "banco.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-05 15:21:45",
+        "usuario": "Sistema",
+        "acao": "Usuário administrador criado automaticamente",
+        "tela": "Login.py",
+        "tipo": "AUDIT"
+    },
+    {
+        "data": "2025-06-05 15:21:51",
+        "usuario": "Sistema",
+        "acao": "login bem sucedido",
+        "tela": "Login.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-05 15:23:56",
+        "usuario": "Sistema",
+        "acao": "Agendamento e cliente foram excluídos com sucesso",
+        "tela": "tela_agendamento.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-05 15:29:03",
+        "usuario": "Sistema",
+        "acao": "Conexão estabelecida com sucesso.",
+        "tela": "banco.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-05 15:29:08",
+        "usuario": "Sistema",
+        "acao": "login bem sucedido",
+        "tela": "Login.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-05 15:30:18",
+        "usuario": "Sistema",
+        "acao": "Conexão encerrada.",
+        "tela": "banco.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-05 15:31:08",
+        "usuario": "Sistema",
+        "acao": "Conexão estabelecida com sucesso.",
+        "tela": "banco.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-05 15:31:14",
+        "usuario": "Sistema",
+        "acao": "login bem sucedido",
+        "tela": "Login.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-05 15:34:29",
+        "usuario": "Sistema",
+        "acao": "Conexão estabelecida com sucesso.",
+        "tela": "banco.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-05 15:34:34",
+        "usuario": "Sistema",
+        "acao": "login bem sucedido",
+        "tela": "Login.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-05 15:38:28",
+        "usuario": "Sistema",
+        "acao": "Conexão estabelecida com sucesso.",
+        "tela": "banco.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-05 15:38:35",
+        "usuario": "Sistema",
+        "acao": "login bem sucedido",
+        "tela": "Login.py",
+        "tipo": "INFO"
     }
 ]

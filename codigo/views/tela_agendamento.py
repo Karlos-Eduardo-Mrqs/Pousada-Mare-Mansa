@@ -30,8 +30,7 @@ class TelaAgendamento:
         # Topo com título
         topo = tk.Frame(self.root, bg='#3A7765', height=60)
         topo.pack(side=tk.TOP, fill=tk.X)
-        titulo = tk.Label(topo, text="Agendamentos", bg='#3A7765', fg='white',
-                          font=("Helvetica", 18, "bold"))
+        titulo = tk.Label(topo, text="Agendamentos", bg='#3A7765', fg='white', font=("Helvetica", 18, "bold"))
         titulo.pack(pady=10)
 
         # Área de pesquisa

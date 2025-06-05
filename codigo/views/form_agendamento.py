@@ -1,12 +1,13 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 from tkcalendar import DateEntry
-from datetime import datetime
+from datetime import date,datetime
 
 from controllers.control_cliente import Control_Cliente
 from controllers.control_tipo import Control_Tipo
 from controllers.control_quarto import Control_Quarto
 from controllers.control_agendamento import Control_Agendamento
+from models.logs_json import LoggerJSON
 
 class FormsAgendamento:
     def __init__(self, parent, conn, dados_iniciais=None, callback_sucesso=None):
@@ -14,7 +15,8 @@ class FormsAgendamento:
         self.conn = conn
         self.dados_iniciais = dados_iniciais
         self.callback_sucesso = callback_sucesso
-
+        
+        self.logger = LoggerJSON()
         self.ctr_cliente = Control_Cliente(self.conn)
         self.ctr_quarto = Control_Quarto(self.conn)
         self.ctr_tipo = Control_Tipo(self.conn)
@@ -98,16 +100,41 @@ class FormsAgendamento:
         cpf = self.entry_cpf.get().strip()
         nome = self.entry_nome.get().strip()
         email = self.entry_email.get().strip()
-        numero_quarto = self.entry_quarto.get().strip()
+        numero_quarto_str = self.entry_quarto.get().strip()
 
-        data_entrada = datetime.strptime(self.entry_check_in.get(), "%d/%m/%Y").date()
-        data_saida = datetime.strptime(self.entry_check_out.get(), "%d/%m/%Y").date()
-
-        if not (cpf and nome and email and numero_quarto):
+        if not (cpf and nome and email and numero_quarto_str):
             messagebox.showerror("Erro", "Todos os campos devem ser preenchidos.")
             return
 
         try:
+            numero_quarto = int(numero_quarto_str)
+            data_atual = date.today()
+            data_entrada = datetime.strptime(self.entry_check_in.get(), "%d/%m/%Y").date()
+            data_saida = datetime.strptime(self.entry_check_out.get(), "%d/%m/%Y").date()
+
+            # Validação de datas
+            if data_saida <= data_entrada:
+                messagebox.showerror("Erro", "A data de saída deve ser após a data de entrada.")
+                return
+
+            if data_entrada < data_atual:
+                messagebox.showerror("Erro", "A data de entrada já passou!")
+                return
+
+            if data_saida < data_atual:
+                messagebox.showerror("Erro", "A data de saída já passou!")
+                return
+
+            # Verifica disponibilidade do quarto
+            quarto = self.ctr_quarto.buscar_quarto_por_numero(numero_quarto)
+            if not quarto:
+                messagebox.showerror("Erro", "Quarto não encontrado.")
+                return
+
+            if not quarto['disponibilidade'] and not self.dados_iniciais:
+                messagebox.showerror("Erro", "Quarto não está disponível.")
+                return
+
             # Verifica se o cliente já existe; se não, adiciona-o
             cliente_existente = self.ctr_cliente.buscar_cliente_por_cpf(cpf)
             if not cliente_existente:
@@ -116,18 +143,21 @@ class FormsAgendamento:
             if self.dados_iniciais:
                 id_agendamento = self.dados_iniciais[0]
                 self.ctr_agendamento.atualizar_agendamento(
-                    id_agendamento, data_entrada, data_saida, cpf, int(numero_quarto)
+                    id_agendamento, data_entrada, data_saida, cpf, numero_quarto
                 )
                 messagebox.showinfo("Sucesso", "Agendamento atualizado com sucesso!")
             else:
                 self.ctr_agendamento.adicionar_agendamento(
-                    data_entrada, data_saida, cpf, int(numero_quarto)
+                    data_entrada, data_saida, cpf, numero_quarto
                 )
+                self.ctr_quarto.atualizar_status_quarto(False, numero_quarto)  # Marca como indisponível
                 messagebox.showinfo("Sucesso", "Agendamento cadastrado com sucesso!")
 
             if self.callback_sucesso:
                 self.callback_sucesso()
             self.janela.destroy()
 
+        except ValueError:
+            messagebox.showerror("Erro", "Formato de data inválido.")
         except Exception as e:
             messagebox.showerror("Erro", str(e))
