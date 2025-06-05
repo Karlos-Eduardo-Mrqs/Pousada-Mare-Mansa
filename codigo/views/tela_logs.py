@@ -9,7 +9,7 @@ class TelaLogs:
         self.root = app.root
         self.root.title("Relatório de Atividades")
         self.root.geometry("750x450")
-        self.root.configure(bg='#FFFFFF')
+        self.root.configure(bg='#FAF1E4')
         self.logger = LoggerJSON()
 
         # Estilo ttk customizado
@@ -24,7 +24,7 @@ class TelaLogs:
         style.map('Treeview', background=[('selected', '#8FBF9F')], foreground=[('selected', 'black')])
 
         # Título
-        titulo = tk.Label(self.root, text="Relatório de Atividades", font=("Segoe UI", 18, "bold"), bg="#FFFFFF", fg="#3A7765")
+        titulo = tk.Label(self.root, text="Relatório de Atividades", font=("Segoe UI", 18, "bold"), bg="#FAF1E4", fg="#3A7765")
         titulo.pack(pady=(20, 10))
 
         # Frame para a tabela e scrollbar
@@ -63,7 +63,6 @@ class TelaLogs:
         btn_voltar = tk.Button(self.root, text="Voltar ao Menu", bg="#3A7765", fg="white",
                               font=("Segoe UI", 12, "bold"), relief=tk.FLAT, command=self.voltar_menu, cursor="hand2")
         btn_voltar.pack(pady=(10, 25), ipadx=15, ipady=7)
-
 
         self.carregar_logs()
 

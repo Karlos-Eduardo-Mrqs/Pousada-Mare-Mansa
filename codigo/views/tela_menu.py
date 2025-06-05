@@ -6,7 +6,7 @@ class TelaMenu:
         self.app = app
         self.root.title("Menu Principal - Pousada Maré Mansa")
         self.root.geometry("600x400")
-        self.root.configure(bg="#FFFFFF")
+        self.root.configure(bg="#FAF1E4")
 
         # Cabeçalho
         topo = tk.Frame(self.root, bg="#397A7B", height=60)

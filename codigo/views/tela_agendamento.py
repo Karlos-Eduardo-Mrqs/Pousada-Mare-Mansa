@@ -20,7 +20,7 @@ class TelaAgendamento:
 
         self.root.title("Agendamentos - Pousada Maré Mansa")
         self.root.geometry("900x500")
-        self.root.configure(bg='#FFFFFF')
+        self.root.configure(bg='#FCEBD5')
 
         self.dados = []
         self.criar_interface()

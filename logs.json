@@ -1,0 +1,23 @@
+[
+    {
+        "data": "2025-06-05 11:04:06",
+        "usuario": "Sistema",
+        "acao": "Usuário administrador criado automaticamente",
+        "tela": "Login.py",
+        "tipo": "AUDIT"
+    },
+    {
+        "data": "2025-06-05 11:04:06",
+        "usuario": "Sistema",
+        "acao": "Falha ao carregar a imagem [Errno 2] No such file or directory: 'LogoPousadaMare.png'",
+        "tela": "Login.py",
+        "tipo": "WARN"
+    },
+    {
+        "data": "2025-06-05 14:09:51",
+        "usuario": "Sistema",
+        "acao": "Falha ao carregar a imagem [Errno 2] No such file or directory: 'LogoPousadaMare.png'",
+        "tela": "Login.py",
+        "tipo": "WARN"
+    }
+]

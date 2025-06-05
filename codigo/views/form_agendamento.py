@@ -23,7 +23,7 @@ class FormsAgendamento:
         self.janela = tk.Toplevel(self.parent)
         self.janela.title("Agendamento")
         self.janela.geometry("350x300")
-        self.janela.configure(bg="#FFFFFF")
+        self.janela.configure(bg="#FCEBD5")
         self.janela.grab_set()
 
         self._criar_widgets()
