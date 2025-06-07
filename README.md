@@ -87,8 +87,8 @@ pousada_mare_mansa/
 ├── controllers/       # Lógica intermediária (Controller)
 ├── model/             # Modelos de dados e regras de negócio (Model)
 ├── views/             # Interface gráfica (View)
-├── assets/            # Ícones e imagens da interface
 ├── main.py            # Arquivo principal de execução
+├── LICENSE            # Arquivo de leitura sobre a licença MIT
 └── README.md          # Documentação do projeto
 ```
 
@@ -99,13 +99,14 @@ pousada_mare_mansa/
 ### 1. Clone o repositório
 
 ```bash
-git clone https://github.com/seu-usuario/pousada_mare_mansa.git
+gh repo clone Karlos-Eduardo-Mrqs/Pousada-Mare-Mansa
+
 cd pousada_mare_mansa
 ```
 
 ### 2. Crie um ambiente virtual
 
-```python
+```bash
 python -m venv .venv
 ```
 
@@ -125,13 +126,13 @@ source .venv/bin/activate
 
 ### 4. Instale as dependências
 
-```python
+```bash
 pip install tkcalendar Pillow
 ```
 
 ### 5. Execute a aplicação
 
-```python
+```bash
 python main.py
 ```
 
