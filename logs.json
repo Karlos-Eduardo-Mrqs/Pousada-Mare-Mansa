@@ -1,0 +1,79 @@
+[
+    {
+        "data": "2025-06-09 09:05:43",
+        "usuario": "Sistema",
+        "acao": "Conexão estabelecida com sucesso.",
+        "tela": "banco.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-09 09:08:28",
+        "usuario": "Sistema",
+        "acao": "Falha ao realizar login",
+        "tela": "Login.py",
+        "tipo": "ERROR"
+    },
+    {
+        "data": "2025-06-09 09:08:37",
+        "usuario": "Sistema",
+        "acao": "Falha ao realizar login",
+        "tela": "Login.py",
+        "tipo": "ERROR"
+    },
+    {
+        "data": "2025-06-09 09:08:53",
+        "usuario": "Sistema",
+        "acao": "login bem sucedido",
+        "tela": "Login.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-09 09:12:50",
+        "usuario": "Sistema",
+        "acao": "Erro ao editar um agendamento inexistente",
+        "tela": "tela_agendamento.py",
+        "tipo": "WARN"
+    },
+    {
+        "data": "2025-06-09 09:13:33",
+        "usuario": "Sistema",
+        "acao": "Agendamento (ID: 4) excluído com sucesso",
+        "tela": "tela_agendamento.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-09 09:15:06",
+        "usuario": "Sistema",
+        "acao": "Conexão encerrada.",
+        "tela": "banco.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-09 09:15:08",
+        "usuario": "Sistema",
+        "acao": "Conexão estabelecida com sucesso.",
+        "tela": "banco.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-10 10:11:25",
+        "usuario": "Sistema",
+        "acao": "Conexão estabelecida com sucesso.",
+        "tela": "banco.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-10 10:11:53",
+        "usuario": "Sistema",
+        "acao": "login bem sucedido",
+        "tela": "Login.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-06-10 10:12:21",
+        "usuario": "Sistema",
+        "acao": "Agendamento (ID: 5) excluído com sucesso",
+        "tela": "tela_agendamento.py",
+        "tipo": "INFO"
+    }
+]
