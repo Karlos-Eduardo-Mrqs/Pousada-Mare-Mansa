@@ -36,8 +36,9 @@ class TelaLogin:
         
         # Logo com borda
         self.logo_img = self.create_image_with_border(
-            "codigo/LogoPousadaMare.png", size=(160, 160), border=2, border_color="#9B9B58"
+            "LogoPousadaMare.png", size=(160, 160), border=2, border_color="#9B9B58"
         )
+        
         if self.logo_img:
             logo_label = tk.Label(self.root, image=self.logo_img, bg="#9B9B58")
             logo_label.place(relx=0.5, y=100, anchor="center")
