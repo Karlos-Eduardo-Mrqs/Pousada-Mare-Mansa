@@ -1,12 +1,13 @@
-![Logo Pousada Maré Mansa](./codigo/LogoPousadaMare.png)
-
 # Idiomas disponibles
 
-- **[Español 🌟](README-ES.md)**
-- **[Inglés](README-US.md)**
-- **[Portugués (Brasil)](README.md)**
+| [🇺🇸 English](README-US.md) | [🇧🇷 Portuguese (Brasil)](README.md) | [🇪🇸 Español 🌟](README-ES.md) |
+|:---------------------------------------:|:----------------------------------------:|:----------------------------------------:|
 
-# 🏨 Pousada Maré Mansa
+---
+
+![Logo Pousada Maré Mansa](./codigo/LogoPousadaMare.png)
+
+## 🏨 Pousada Maré Mansa
 
 Sistema de gestión para una casa de huéspedes, desarrollado con **Python**, **Tkinter** y **SQLite**, utilizando la arquitectura **MVC**.
 
@@ -27,7 +28,7 @@ La aplicación de escritorio facilita la administración de una casa de huésped
 ## 🧩 Características
 
 | Módulo | Descripción |
-|----------------|---------------------------------------------------------------------------| 
+|----------------|---------------------------------------------------------------------------|
 | 🔐 Inicio de sesión | Autenticación de usuario |
 | 📋 Menú | Navegación entre las funciones principales |
 | 👤 Clientes | Registro automático por CPF durante la programación |
@@ -111,7 +112,7 @@ pousada_mare_mansa/
 ### 1. Clonar el repositorio
 
 ```bash
-gh repo clone Lucas-deAndrade21/Pousada-Mare-Mansa
+gh repo clone Karlos-Eduardo-Mrqs/Pousada-Mare-Mansa
 
 cd pousada_mare_mansa
 ```
@@ -158,7 +159,7 @@ Proyecto creado con fines educativos. Puedes usarlo y modificarlo según sea nec
 
 ---
 
-# 🏁 Consideraciones finales
+## 🏁 Consideraciones finales
 
 Proyecto creado con fines educativos. Puedes usarlo y modificarlo según sea necesario.
 

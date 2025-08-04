@@ -1,12 +1,13 @@
-![Logo Pousada Maré Mansa](./codigo/LogoPousadaMare.png)
-
 # Available Languages
 
-- **[English 🌟](README-US.md)**
-- **[Portuguese(Brazil)](README.md)**
-- **[Spanish](README-ES.md)**
+| [🇺🇸 English 🌟](README-US.md) | [🇧🇷 Portuguese (Brasil)](README.md) | [🇪🇸 Español](README-ES.md) |
+|:---------------------------------------:|:----------------------------------------:|:----------------------------------------:|
 
-# 🏨 Pousada Maré Mansa
+---
+
+![Logo Pousada Maré Mansa](./codigo/LogoPousadaMare.png)
+
+## 🏨 Pousada Maré Mansa
 
 Management system for a guesthouse, developed with **Python**, **Tkinter** and **SQLite**, using the **MVC** architecture.
 
@@ -111,7 +112,7 @@ pousada_mare_mansa/
 ### 1. Clone the repository
 
 ```bash
-gh repo clone Lucas-deAndrade21/Pousada-Mare-Mansa
+gh repo clone Karlos-Eduardo-Mrqs/Pousada-Mare-Mansa
 
 cd pousada_mare_mansa
 ```
@@ -159,7 +160,7 @@ Project created for educational purposes. Feel free to use and modify as needed.
 
 ---
 
-# 🏁 Final Considerations
+## 🏁 Final Considerations
 
 Project created for educational purposes. Feel free to use and modify as needed.
 
