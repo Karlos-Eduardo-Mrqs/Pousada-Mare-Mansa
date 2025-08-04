@@ -155,8 +155,7 @@ python main.py
 
 Project created for educational purposes. Feel free to use and modify as needed.
 
-*Feel free to open issues, send pull requests or just share ideas!
-*
+*Feel free to open issues, send pull requests or just share ideas!*
 
 ---
 
