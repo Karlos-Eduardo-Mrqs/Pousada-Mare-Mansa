@@ -36,7 +36,7 @@ class TelaLogin:
         
         # Logo com borda
         self.logo_img = self.create_image_with_border(
-            "LogoPousadaMare.png", size=(160, 160), border=2, border_color="#9B9B58"
+            "codigo/LogoPousadaMare.png", size=(160, 160), border=2, border_color="#9B9B58"
         )
         
         if self.logo_img:
