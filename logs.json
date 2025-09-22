@@ -47,5 +47,82 @@
         "acao": "login bem sucedido",
         "tela": "Login.py",
         "tipo": "INFO"
+    },
+    {
+        "data": "2025-09-20 15:47:21",
+        "usuario": "Sistema",
+        "acao": "Conexão estabelecida com sucesso.",
+        "tela": "banco.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-09-20 15:47:22",
+        "usuario": "Sistema",
+        "acao": "Falha ao carregar a imagem [Errno 2] No such file or directory: 'codigo/LogoPousadaMare.png'",
+        "tela": "Login.py",
+        "tipo": "WARN"
+    },
+    {
+        "data": "2025-09-20 15:47:30",
+        "usuario": "Sistema",
+        "acao": "Falha ao realizar login",
+        "tela": "Login.py",
+        "tipo": "ERROR"
+    },
+    {
+        "data": "2025-09-20 15:47:38",
+        "usuario": "Sistema",
+        "acao": "login bem sucedido",
+        "tela": "Login.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-09-20 15:48:20",
+        "usuario": "Sistema",
+        "acao": "Conexão encerrada.",
+        "tela": "banco.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-09-20 15:48:25",
+        "usuario": "Sistema",
+        "acao": "Conexão estabelecida com sucesso.",
+        "tela": "banco.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-09-20 15:48:25",
+        "usuario": "Sistema",
+        "acao": "Falha ao carregar a imagem [Errno 2] No such file or directory: 'codigo/LogoPousadaMare.png'",
+        "tela": "Login.py",
+        "tipo": "WARN"
+    },
+    {
+        "data": "2025-09-20 15:48:45",
+        "usuario": "Sistema",
+        "acao": "Conexão estabelecida com sucesso.",
+        "tela": "banco.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-09-20 15:49:06",
+        "usuario": "Sistema",
+        "acao": "login bem sucedido",
+        "tela": "Login.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-09-20 15:50:22",
+        "usuario": "Sistema",
+        "acao": "Erro ao editar um agendamento inexistente",
+        "tela": "tela_agendamento.py",
+        "tipo": "WARN"
+    },
+    {
+        "data": "2025-09-20 15:51:01",
+        "usuario": "Sistema",
+        "acao": "Conexão encerrada.",
+        "tela": "banco.py",
+        "tipo": "INFO"
     }
 ]
