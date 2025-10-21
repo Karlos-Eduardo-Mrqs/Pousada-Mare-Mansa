@@ -124,5 +124,12 @@
         "acao": "Conexão encerrada.",
         "tela": "banco.py",
         "tipo": "INFO"
+    },
+    {
+        "data": "2025-10-09 16:13:35",
+        "usuario": "Sistema",
+        "acao": "Conexão estabelecida com sucesso.",
+        "tela": "banco.py",
+        "tipo": "INFO"
     }
 ]
