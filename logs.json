@@ -131,5 +131,26 @@
         "acao": "Conexão estabelecida com sucesso.",
         "tela": "banco.py",
         "tipo": "INFO"
+    },
+    {
+        "data": "2025-10-21 08:23:54",
+        "usuario": "Sistema",
+        "acao": "Conexão estabelecida com sucesso.",
+        "tela": "banco.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-10-21 08:24:01",
+        "usuario": "Sistema",
+        "acao": "login bem sucedido",
+        "tela": "Login.py",
+        "tipo": "INFO"
+    },
+    {
+        "data": "2025-10-21 08:24:59",
+        "usuario": "Sistema",
+        "acao": "Conexão encerrada.",
+        "tela": "banco.py",
+        "tipo": "INFO"
     }
 ]
